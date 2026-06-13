@@ -1,0 +1,36 @@
+{
+  "name": "@mappamind_/store",
+  "version": "0.0.0",
+  "description": "Structured JSON/JSONL persistence for Mappamind.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/store"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@mappamind_/baseline": "0.0.0",
+    "@mappamind_/extractors": "0.0.0"
+  }
+}

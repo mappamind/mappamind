@@ -1,0 +1,34 @@
+name: Publish
+
+# Releases are tag-driven, never laptop-published. Push a tag like v0.1.0 and CI
+# publishes every package at that version with npm provenance.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write # required for npm --provenance (OIDC)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      # Smoke-test the exact tagged commit as installed tarballs before anything
+      # is uploaded — catches post-publish breakage at the point of no return.
+      - run: node scripts/pack-smoke.mjs
+      # Strip the leading "v" from the tag and publish the whole graph in
+      # dependency order at that version (scripts/publish.mjs).
+      - name: Publish ${{ github.ref_name }}
+        run: node scripts/publish.mjs "${GITHUB_REF_NAME#v}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

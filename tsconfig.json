@@ -1,0 +1,17 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/ledger" },
+    { "path": "./packages/capture" },
+    { "path": "./packages/extractors" },
+    { "path": "./packages/seam" },
+    { "path": "./packages/baseline" },
+    { "path": "./packages/impact" },
+    { "path": "./packages/synthesis" },
+    { "path": "./packages/store" },
+    { "path": "./packages/pipeline" },
+    { "path": "./packages/scoring" },
+    { "path": "./packages/mappamind" }
+  ]
+}

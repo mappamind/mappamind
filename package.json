@@ -1,0 +1,20 @@
+{
+  "name": "mappamind",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "gen:hooks": "npm run build && node scripts/gen-plugin-hooks.mjs",
+    "smoke": "npm run build && node scripts/pack-smoke.mjs",
+    "test": "npm run build && node scripts/run-tests.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "^5.8.3"
+  }
+}

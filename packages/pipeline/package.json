@@ -1,0 +1,48 @@
+{
+  "name": "@mappamind_/pipeline",
+  "version": "0.0.0",
+  "description": "Mappamind pipeline and CLI: the baseline Studio and the before/after shift card.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./mappamind": "./dist/mappamind.js",
+    "./cli": "./dist/cli.js"
+  },
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "mappamind": "./dist/mappamind.js",
+    "mappamind-baseline": "./dist/cli.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/pipeline"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@mappamind_/baseline": "0.0.0",
+    "@mappamind_/capture": "0.0.0",
+    "@mappamind_/extractors": "0.0.0",
+    "@mappamind_/impact": "0.0.0",
+    "@mappamind_/ledger": "0.0.0",
+    "@mappamind_/seam": "0.0.0",
+    "@mappamind_/store": "0.0.0",
+    "@mappamind_/synthesis": "0.0.0"
+  }
+}

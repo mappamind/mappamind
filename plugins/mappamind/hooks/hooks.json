@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v mappamind >/dev/null 2>&1; then mappamind snapshot \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)\"; else echo \"mappamind not found on PATH: run 'npm i -g mappamind' or remove this hook\" >&2; fi",
+            "statusMessage": "Mappamind: recording the before snapshot",
+            "timeout": 600
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v mappamind >/dev/null 2>&1; then mappamind shift \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)\" --hook --host codex; else echo \"mappamind not found on PATH: run 'npm i -g mappamind' or remove this hook\" >&2; fi",
+            "statusMessage": "Mappamind: rendering the shift card",
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}
