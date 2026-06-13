@@ -1,0 +1,35 @@
+{
+  "name": "@mappamind_/capture",
+  "version": "0.0.0",
+  "description": "Filesystem and git capture for Mappamind.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/capture"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@mappamind_/core": "0.0.0"
+  }
+}

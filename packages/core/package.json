@@ -1,0 +1,32 @@
+{
+  "name": "@mappamind_/core",
+  "version": "0.0.0",
+  "description": "Shared primitives for Mappamind (config, JSON/evidence types, repo identity).",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/core"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  }
+}

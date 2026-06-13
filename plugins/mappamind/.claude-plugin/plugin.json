@@ -1,0 +1,19 @@
+{
+  "name": "mappamind",
+  "version": "0.1.0",
+  "description": "See what your AI coding agent just did to your system's behavior, flow, and architecture. Grounded, visual, in-session.",
+  "author": {
+    "name": "Mappamind contributors",
+    "url": "https://github.com/mappamind/mappamind"
+  },
+  "homepage": "https://github.com/mappamind/mappamind",
+  "repository": "https://github.com/mappamind/mappamind",
+  "license": "MIT",
+  "keywords": [
+    "ai-agents",
+    "claude-code",
+    "code-visualization",
+    "developer-tools"
+  ],
+  "hooks": "./hooks/claude-hooks.json"
+}
