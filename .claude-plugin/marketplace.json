@@ -1,0 +1,15 @@
+{
+  "name": "mappamind-plugins",
+  "owner": {
+    "name": "Mappamind contributors",
+    "url": "https://github.com/mappamind/mappamind"
+  },
+  "description": "Grounded, visual architecture-impact cards for AI coding sessions.",
+  "plugins": [
+    {
+      "name": "mappamind",
+      "source": "./plugins/mappamind",
+      "description": "See what your AI coding agent just did to your system's behavior, flow, and architecture. Grounded, visual, in-session."
+    }
+  ]
+}

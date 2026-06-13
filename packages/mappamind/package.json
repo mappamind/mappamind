@@ -1,0 +1,34 @@
+{
+  "name": "mappamind-cli",
+  "version": "0.0.0",
+  "description": "See what your AI coding agent just did to your system's behavior, flow, and architecture. Grounded, visual, in-session. Installs the `mappamind` command.",
+  "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "mappamind": "./dist/mappamind.js",
+    "mappamind-baseline": "./dist/cli.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/mappamind"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@mappamind_/pipeline": "0.0.0"
+  }
+}

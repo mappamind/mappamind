@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test (${{ matrix.os }}, node ${{ matrix.node-version }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        # Every package declares engines.node ">=20"; cover the floor (20) and
+        # the current LTS (22) on both OSes.
+        node-version: [20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  pack-smoke:
+    name: pack-smoke (clean install + run, ${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # Packs all public packages, installs the tarballs into a throwaway project,
+      # and runs the installed bin (status, hooks --install, snapshot, no-model
+      # shift). Proves the published graph installs and runs without the registry.
+      - run: node scripts/pack-smoke.mjs
+      # Strengthening bundle (d): the same 12 tarballs installed GLOBALLY, so the
+      # wrapper's `mappamind` bin is linked into the global prefix. Proves the
+      # global bin shim / PATH resolution / hook registration work on macOS+Linux.
+      - run: node scripts/pack-smoke.mjs --global

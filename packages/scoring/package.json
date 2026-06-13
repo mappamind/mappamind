@@ -1,0 +1,42 @@
+{
+  "name": "@mappamind_/scoring",
+  "version": "0.0.0",
+  "description": "Precision/recall and citation-acceptance harness for Mappamind.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "mappamind-score": "./dist/cli.js",
+    "mappamind-score-channels": "./dist/channelCli.js"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mappamind/mappamind.git",
+    "directory": "packages/scoring"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@mappamind_/baseline": "0.0.0",
+    "@mappamind_/core": "0.0.0",
+    "@mappamind_/seam": "0.0.0"
+  }
+}

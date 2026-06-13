@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mappamind — live examples</title>
+<style>
+:root{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f6f7f9;color:#11161c;line-height:1.55}
+@media (prefers-color-scheme:dark){body{background:#11151b;color:#e7ebf0}.ex{background:#1a1f27;border-color:#2a313c}.head p{color:#9aa6b2}.ex p{color:#9aa6b2}}
+.wrap{max-width:1000px;margin:0 auto;padding:56px 24px 80px}
+.head{text-align:center;margin-bottom:44px}
+.head h1{font-size:30px;margin:0 0 10px;letter-spacing:-0.02em}
+.head p{font-size:16px;color:#5b6770;margin:0 auto;max-width:620px}
+.head .sub{font-size:13.5px;margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.ex{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e6e9ee;border-radius:16px;padding:22px 22px 20px;transition:transform .12s ease,box-shadow .12s ease}
+.ex:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(20,30,50,.10)}
+.extag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:4px 9px;margin-bottom:12px}
+.extag.red{color:#c0392b;background:#fdecea}.extag.amber{color:#9a6a00;background:#fbf0d9}.extag.green{color:#1f8a4c;background:#e6f6ec}.extag.blue{color:#2b6cb0;background:#e8f0fb}
+.ex h3{margin:0 0 6px;font-size:17px}
+.ex p{margin:0 0 14px;font-size:13.5px;color:#5b6770}
+.open{font-size:13px;font-weight:600;color:#2f6df0}
+.foot{text-align:center;margin-top:40px;font-size:13px;color:#7a8590}
+.foot a{color:#2f6df0;text-decoration:none}
+</style></head>
+<body><div class="wrap">
+<div class="head">
+<h1>Mappamind — live examples</h1>
+<p>See what an AI coding agent did to a system's architecture: grounded in real code, visual, shown at the accept moment. These are static example cards from a fictional storefront — exactly what Mappamind renders for your own repo.</p>
+<p class="sub"><a href="https://github.com/mappamind/mappamind">← Back to the repo</a></p>
+</div>
+<div class="grid">
+<a class="ex" href="examples/shift-broken.html"><div class="extag red">Broken channel</div><h3>A rename broke a cross-service call</h3><p>An agent renamed a route on the provider but left two callers on the old path. The card flags the break and cites every stranded caller.</p><span class="open">Open example →</span></a>
+<a class="ex" href="examples/shift-multi.html"><div class="extag red">Multiple breaks</div><h3>Three boundaries broken at once</h3><p>One session that broke channels across three unrelated clusters — grouped by severity so nothing tangles, however many break.</p><span class="open">Open example →</span></a>
+<a class="ex" href="examples/shift-healthy.html"><div class="extag green">Healthy</div><h3>A calm, additive session</h3><p>An agent added a search service. Nothing existing changed — the card says so plainly instead of inventing alarm.</p><span class="open">Open example →</span></a>
+<a class="ex" href="examples/studio.html"><div class="extag blue">Studio</div><h3>The standing architecture</h3><p>The grounded picture a shift card diffs against: services, cross-service channels, and capabilities — every node backed by a real file:line.</p><span class="open">Open example →</span></a>
+</div>
+<div class="foot">Every claim cites a real code fact or it is dropped. <a href="https://github.com/mappamind/mappamind">github.com/mappamind/mappamind</a></div>
+</div></body></html>

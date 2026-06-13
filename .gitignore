@@ -1,0 +1,15 @@
+.mappamind/
+.claude/
+.codex/
+.env
+.env.*
+
+cache/
+tmp/
+dist/
+coverage/
+release/
+node_modules/
+npm-debug.log*
+
+.DS_Store

@@ -1,0 +1,233 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shopmesh · Studio — mappamind</title>
+<style>:root{
+  --bg: oklch(96.8% 0.005 255); --shell: oklch(99.5% 0.001 255); --card: oklch(100% 0 0); --card2: oklch(100% 0 0);
+  --line: oklch(92.5% 0.006 255); --line-soft: oklch(95.5% 0.004 255);
+  --ink: oklch(28% 0.03 262); --dim: oklch(48% 0.022 262); --faint: oklch(62% 0.018 262);
+  --blue: oklch(54% 0.18 258); --blue-soft: oklch(96% 0.03 258);
+  --green: oklch(57% 0.15 152); --green-soft: oklch(96% 0.04 152);
+  --red: oklch(58% 0.21 27); --red-soft: oklch(96.5% 0.03 27);
+  --amber: oklch(58% 0.14 80); --amber-soft: oklch(96.5% 0.04 75);
+  --violet: oklch(55% 0.17 295); --indigo: oklch(50% 0.17 270);
+  --teal: oklch(58% 0.11 195); --cyan: oklch(56% 0.12 230);
+  --slate: oklch(55% 0.03 255); --slate-soft: oklch(95% 0.008 255);
+  --shadow-sm: 0 1px 2px oklch(40% 0.03 262 / 0.06), 0 1px 1px oklch(40% 0.03 262 / 0.04);
+  --shadow: 0 1px 2px oklch(40% 0.03 262 / 0.06), 0 6px 20px oklch(40% 0.03 262 / 0.07);
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --r: 14px;
+}
+body:has(#mm-dark:checked){
+  --bg: oklch(18% 0.012 262); --shell: oklch(20.5% 0.014 262); --card: oklch(23% 0.016 262); --card2: oklch(23% 0.016 262);
+  --line: oklch(31% 0.018 262); --line-soft: oklch(27% 0.016 262);
+  --ink: oklch(93% 0.01 262); --dim: oklch(72% 0.014 262); --faint: oklch(58% 0.016 262);
+  --blue: oklch(70% 0.15 258); --blue-soft: oklch(34% 0.06 258);
+  --green: oklch(72% 0.15 152); --green-soft: oklch(34% 0.07 152);
+  --red: oklch(68% 0.20 27); --red-soft: oklch(34% 0.08 27);
+  --amber: oklch(76% 0.14 70); --amber-soft: oklch(36% 0.06 70);
+  --violet: oklch(72% 0.13 295); --indigo: oklch(68% 0.14 270);
+  --teal: oklch(72% 0.10 195); --cyan: oklch(72% 0.11 230);
+  --slate: oklch(70% 0.03 255); --slate-soft: oklch(28% 0.02 255);
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3);
+  --shadow: 0 2px 4px oklch(0% 0 0 / 0.3), 0 8px 24px oklch(0% 0 0 / 0.28);
+}
+@media print{ .sidebar,.topbar{display:none} body{background:white} }
+*{box-sizing:border-box; margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased}
+#mm-dark,.mm-tab{position:absolute; opacity:0; pointer-events:none; width:0; height:0}
+.app{display:grid; grid-template-columns:232px 1fr; min-height:100vh}
+.sidebar{background:var(--shell); border-right:1px solid var(--line); padding:20px 14px; display:flex; flex-direction:column; gap:4px; position:sticky; top:0; height:100vh}
+.brand{display:flex; align-items:center; gap:9px; padding:4px 8px 18px}
+.brand .logo{width:34px; height:34px; flex:none}
+.brand b{font-size:17px; font-weight:600; letter-spacing:-0.02em; color:var(--ink)}
+.brand b i{font-style:normal; background:linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.nav{display:flex; flex-direction:column; gap:2px}
+.navlink{display:flex; align-items:center; gap:11px; padding:8px 11px; border-radius:9px; color:var(--dim); font-size:13.5px; text-decoration:none; font-weight:500; cursor:pointer; user-select:none}
+.navlink svg{width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.7; opacity:0.85}
+.navlink:hover{background:var(--line-soft); color:var(--ink)}
+.navlink.on{background:var(--blue); color:white; box-shadow:var(--shadow-sm)}
+.navlink.on svg{opacity:1}
+.side-card{margin-top:auto; background:var(--blue-soft); border:1px solid var(--line); border-radius:12px; padding:14px; display:flex; gap:11px; align-items:flex-start}
+.side-card .cloud{width:30px; height:30px; flex:none; border-radius:8px; background:var(--card); display:grid; place-items:center; box-shadow:var(--shadow-sm)}
+.side-card .cloud svg{width:18px; height:18px; stroke:var(--blue); fill:none; stroke-width:1.6}
+.side-card p{font-size:11.5px; line-height:1.45; color:var(--dim)}
+.side-card a{display:block; margin-top:6px; font-size:11.5px; color:var(--blue); text-decoration:none; font-weight:600}
+.main{min-width:0; display:flex; flex-direction:column}
+.topbar{display:flex; align-items:center; gap:12px; padding:14px 26px; border-bottom:1px solid var(--line); background:var(--shell); position:sticky; top:0; z-index:5}
+.crumb{font-size:13.5px; color:var(--faint); font-weight:500}
+.crumb b{color:var(--ink); font-weight:600}
+.crumb .sep{margin:0 8px; opacity:0.5}
+.topbar .spacer{flex:1}
+.pill{font-family:var(--sans); font-size:12.5px; color:var(--dim); font-weight:550; border:1px solid var(--line); border-radius:9px; padding:6px 12px; background:var(--card); cursor:pointer; display:inline-flex; align-items:center; gap:7px; user-select:none}
+.pill svg{width:13px; height:13px; stroke:var(--faint); fill:none; stroke-width:1.8}
+.pill .sun{display:none}
+body:has(#mm-dark:checked) .pill .sun{display:inline}
+body:has(#mm-dark:checked) .pill .moon{display:none}
+.avatar{width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, var(--violet), var(--blue)); color:white; display:grid; place-items:center; font-size:12px; font-weight:650; position:relative}
+.avatar::after{content:""; position:absolute; right:-1px; bottom:-1px; width:9px; height:9px; border-radius:50%; background:var(--green); border:2px solid var(--shell)}
+.content{padding:26px; display:flex; flex-direction:column; gap:18px; max-width:1320px; width:100%}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow-sm)}
+.sect-title{font-size:11px; font-weight:650; letter-spacing:0.09em; color:var(--faint)}
+.ft-link{font-family:var(--sans); font-size:11px; font-weight:600; color:var(--blue); text-decoration:none}
+.ft-link:hover{text-decoration:underline}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static; height:auto; flex-direction:row; flex-wrap:wrap; align-items:center; gap:6px; padding:12px 14px; border-right:none; border-bottom:1px solid var(--line)}
+  .brand{padding:0 8px 0 0}
+  .side-card{display:none}
+  .nav{flex-direction:row; flex-wrap:wrap; gap:4px; flex:1}
+  .navlink{padding:7px 10px; font-size:13px}
+  .content{padding:18px}
+}
+.hdr{padding:24px 28px; display:flex; align-items:flex-start; gap:24px; flex-wrap:wrap}
+.hdr-main{flex:1; min-width:340px}
+.eyebrow{font-size:11px; font-weight:650; letter-spacing:0.09em; color:var(--faint); margin-bottom:11px}
+h1{font-size:25px; line-height:1.2; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px}
+.meta{font-family:var(--mono); font-size:12.5px; color:var(--dim)}
+.badge{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--green); background:var(--green-soft); border-radius:999px; padding:6px 13px}
+.badge svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.7}
+.sect{padding:20px 24px 22px}
+.sect-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:8px; flex-wrap:wrap}
+.legend{display:flex; gap:18px; flex-wrap:wrap; font-size:12px; color:var(--dim)}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.legend i{width:9px; height:9px; border-radius:50%; display:inline-block; font-style:normal}
+.legend .ext{width:14px; height:0; border-top:2px dashed var(--slate); border-radius:0}
+.legend .solo{background:transparent; border:1.5px solid var(--faint)}
+.meshwrap{overflow:auto; max-height:540px; margin-top:6px; border:1px solid var(--line-soft); border-radius:10px}
+.mesh{display:block; margin:12px 16px}
+.mesh text{font-family:var(--mono)}
+.col-cap{font-size:10.5px; letter-spacing:0.1em; font-weight:700; fill:var(--faint)}
+.nlabel{font-family:var(--mono); font-size:12.5px; fill:var(--ink)}
+.empty{font-size:13px; color:var(--faint); padding:14px 4px}
+.caps{padding:4px 0 0}
+.caps-head{padding:0 24px; display:flex; align-items:baseline; gap:12px; margin-bottom:14px}
+.caps-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:0 24px 22px}
+@media (max-width:1080px){.caps-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:760px){.hdr-main{min-width:0}}
+@media (max-width:560px){.caps-grid{grid-template-columns:1fr}}
+.cap{border:1px solid var(--line); border-radius:12px; padding:15px 16px; display:flex; flex-direction:column; gap:8px; background:var(--card)}
+.cap .ct{display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+.cap .dot{width:9px; height:9px; border-radius:50%; flex:none}
+.cap h2{font-size:14.5px; font-weight:650}
+.cap .conf{font-size:10px; font-weight:600; color:var(--faint); background:var(--line-soft); border-radius:6px; padding:2px 7px; letter-spacing:0.02em}
+.cap p{font-size:12.5px; line-height:1.5; color:var(--dim); text-wrap:pretty; flex:1}
+.cap .via{font-family:var(--mono); font-size:10.5px; color:var(--faint); padding-top:8px; border-top:1px solid var(--line-soft)}
+.unknowns{padding:20px 24px 22px}
+.unknowns ul{list-style:none; display:flex; flex-direction:column; gap:9px; margin-top:12px}
+.unknowns li{font-size:12.5px; line-height:1.5; color:var(--dim); display:flex; gap:10px; align-items:flex-start}
+.unknowns li::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--faint); flex:none; margin-top:6px}
+.footrail{display:flex; align-items:center; gap:13px; flex-wrap:wrap; padding:14px 24px; background:var(--card); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow-sm)}
+.grounded{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--green)}
+.grounded svg{width:15px; height:15px; stroke:var(--green); fill:none; stroke-width:1.7}
+.footrail .ft-note{font-size:12.5px; color:var(--dim)}
+.footrail .spacer{flex:1}
+.hbit{font-size:12px; font-weight:550; color:var(--dim); background:var(--line-soft); border-radius:8px; padding:5px 11px; display:inline-flex; align-items:center; gap:7px}
+.hbit.ext{color:var(--slate)}
+.view{display:none}
+body:has(#tab-studio:checked) .view-studio,
+body:has(#tab-shifts:checked) .view-shifts,
+body:has(#tab-caps:checked) .view-caps,
+body:has(#tab-contracts:checked) .view-contracts{display:flex; flex-direction:column; gap:18px}
+body:has(#tab-studio:checked) label[for="tab-studio"],
+body:has(#tab-shifts:checked) label[for="tab-shifts"],
+body:has(#tab-caps:checked) label[for="tab-caps"],
+body:has(#tab-contracts:checked) label[for="tab-contracts"]{background:var(--blue); color:white; box-shadow:var(--shadow-sm)}
+body:has(#tab-studio:checked) label[for="tab-studio"] svg,
+body:has(#tab-shifts:checked) label[for="tab-shifts"] svg,
+body:has(#tab-caps:checked) label[for="tab-caps"] svg,
+body:has(#tab-contracts:checked) label[for="tab-contracts"] svg{opacity:1}
+.tabhead{padding:22px 26px 0}
+.tabhead h1{font-size:21px; margin-bottom:4px}
+.tabhead p{font-size:13px; color:var(--dim)}
+.capx{padding:18px 20px}
+.capx .ct{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:7px}
+.capx .dot{width:9px; height:9px; border-radius:50%; flex:none}
+.capx h2{font-size:16px; font-weight:660}
+.capx .tag{font-size:10px; font-weight:600; color:var(--faint); background:var(--line-soft); border-radius:6px; padding:2px 7px; letter-spacing:0.02em}
+.capx p{font-size:13.5px; line-height:1.55; color:var(--dim); margin-bottom:12px; text-wrap:pretty}
+.cites{list-style:none; display:flex; flex-direction:column; gap:5px; border-top:1px solid var(--line-soft); padding-top:11px}
+.cites li{font-family:var(--mono); font-size:11.5px; color:var(--faint); display:flex; flex-wrap:wrap; gap:8px; overflow-wrap:anywhere; min-width:0}
+.cites li b{color:var(--dim); font-weight:600}
+.tblwrap{overflow-x:auto; max-width:100%}
+.tbl{width:100%; border-collapse:collapse; font-size:12.5px}
+.tbl th{text-align:left; font-size:10.5px; letter-spacing:0.08em; font-weight:650; color:var(--faint); padding:8px 14px; border-bottom:1px solid var(--line)}
+.tbl td{padding:10px 14px; border-bottom:1px solid var(--line-soft); color:var(--dim); vertical-align:top}
+.tbl td.k{font-family:var(--mono); color:var(--ink); font-weight:600}
+.tbl td.loc{font-family:var(--mono); font-size:11.5px}
+.st{font-size:11px; font-weight:650; border-radius:999px; padding:3px 10px; display:inline-block}
+.st.in_sync,.st.verified{color:var(--green); background:var(--green-soft)}
+.st.dangling{color:var(--red); background:var(--red-soft)}
+.st.orphan{color:var(--amber); background:var(--amber-soft)}
+.st.external{color:var(--slate); background:var(--slate-soft)}
+.st-note{display:block; margin-top:4px; font-size:10px; font-weight:500; color:var(--faint); letter-spacing:0.02em}
+.shifts{list-style:none; display:flex; flex-direction:column; gap:0}
+.shiftrow{display:flex; align-items:center; gap:14px; padding:14px 20px; border-bottom:1px solid var(--line-soft); text-decoration:none; color:inherit}
+.shiftrow:last-child{border-bottom:none}
+.shiftrow:hover{background:var(--line-soft)}
+.shiftrow .sev{font-size:10px; font-weight:700; letter-spacing:0.06em; color:white; border-radius:6px; padding:3px 8px; flex:none; min-width:62px; text-align:center}
+.sev.broad{background:var(--amber); color:oklch(22% 0.02 70)} .sev.local{background:var(--blue)} .sev.cosmetic{background:var(--faint)}
+.shiftrow .st-body{display:flex; flex-direction:column; min-width:0}
+.shiftrow .st-title{font-weight:600; color:var(--ink); font-size:13.5px}
+.shiftrow .st-meta{font-family:var(--mono); font-size:11.5px; color:var(--faint); margin-top:2px}
+.shiftrow .when{margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--faint); flex:none}
+.empty{font-size:13px; color:var(--faint); padding:22px 26px}</style></head><body>
+<input type="checkbox" id="mm-dark" aria-hidden="true" tabindex="-1">
+<input class="mm-tab" type="radio" name="mm-tab" id="tab-studio" checked aria-hidden="true" tabindex="-1">
+<input class="mm-tab" type="radio" name="mm-tab" id="tab-shifts" aria-hidden="true" tabindex="-1">
+<input class="mm-tab" type="radio" name="mm-tab" id="tab-caps" aria-hidden="true" tabindex="-1">
+<input class="mm-tab" type="radio" name="mm-tab" id="tab-contracts" aria-hidden="true" tabindex="-1">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-shift" viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 14 2-8h6"/></symbol>
+<symbol id="i-service" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.5 8 11 16M16.5 8 13 16M8 6h8"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-contract" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1A3.5 3.5 0 0 1 18 18z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+</defs></svg>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><svg class="logo" viewBox="0 0 48 48" fill="none" aria-hidden="true"><image href="data:image/png;base64,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" width="48" height="48"/></svg><b>mappa<i>mind</i></b></div>
+    <nav class="nav"><label class="navlink" for="tab-studio"><svg><use href="#i-service"></use></svg>Studio</label><label class="navlink" for="tab-shifts"><svg><use href="#i-shift"></use></svg>Shifts</label><label class="navlink" for="tab-caps"><svg><use href="#i-grid"></use></svg>Capabilities</label><label class="navlink" for="tab-contracts"><svg><use href="#i-contract"></use></svg>Contracts</label></nav>
+    <div class="side-card"><span class="cloud"><svg><use href="#i-cloud"></use></svg></span><div><p>The system at rest. The shift card diffs against this baseline.</p></div></div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="crumb"><b>Studio</b><span class="sep">/</span>shopmesh</span>
+      <span class="spacer"></span>
+      
+      <label class="pill" for="mm-dark"><svg class="moon"><use href="#i-moon"></use></svg><svg class="sun"><use href="#i-sun"></use></svg>Theme</label>
+      <div class="avatar">SS</div>
+    </div>
+    <div class="content"><section class="view view-studio"><div class="card hdr">
+        <div class="hdr-main">
+          <div class="eyebrow">WHAT THE SYSTEM IS</div>
+          <h1>shopmesh</h1>
+          <div class="meta">7 services · 1 external · 3 capabilities</div>
+        </div>
+        <span class="badge"><svg><use href="#i-shield"></use></svg>Grounded · Leashed</span>
+      </div>
+      <div class="card sect">
+        <div class="sect-head">
+          <span class="sect-title">ARCHITECTURE &amp; FLOW · column = call depth (entry on the left)</span>
+          <div class="legend">
+            <span><i class="ext"></i>unresolved</span>
+          </div>
+        </div>
+        <div class="meshwrap"><svg class="mesh" width="729" height="206" viewBox="0 0 729 206" role="img" aria-label="Service mesh — who calls whom, calls flow left to right."><defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10z" fill="var(--slate)"/></marker><filter id="sf" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.5" stdDeviation="4" flood-color="oklch(40% 0.03 262)" flood-opacity="0.09"/></filter></defs><text class="col-cap" x="24" y="26">ENTRY</text><text class="col-cap" x="200" y="26">DEPTH 2</text><text class="col-cap" x="376" y="26">DEPTH 3</text><text class="col-cap" x="555" y="26">UNRESOLVED</text><g fill="none" stroke="var(--slate)" stroke-width="1.2" opacity="0.45"><path d="M164,111 C182,111 182,111 200,111" marker-end="url(#ar)"/><path d="M164,59 C182,59 182,111 200,111" marker-end="url(#ar)"/><path d="M164,111 C182,111 182,163 200,163" marker-end="url(#ar)"/><path d="M340,163 C358,163 358,111 376,111" marker-end="url(#ar)"/><path d="M340,163 C358,163 358,59 376,59" marker-end="url(#ar)"/><path d="M164,111 C182,111 182,59 200,59" marker-end="url(#ar)"/><path d="M164,59 C182,59 182,59 200,59" marker-end="url(#ar)"/></g><g fill="none" stroke="var(--slate)" stroke-width="1.2" stroke-dasharray="6 5" opacity="0.55"><path d="M519,111 C537,111 537,59 555,59" marker-end="url(#ar)"/></g><g><rect x="200" y="40" width="140" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="218" cy="59" r="4" fill="var(--blue)"/><text class="nlabel" x="230" y="63">auth-api</text></g><g><rect x="200" y="92" width="140" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="218" cy="111" r="4" fill="var(--blue)"/><text class="nlabel" x="230" y="115">catalog-api</text></g><g><rect x="200" y="144" width="140" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="218" cy="163" r="4" fill="var(--blue)"/><text class="nlabel" x="230" y="167">orders-api</text></g><g><rect x="376" y="40" width="143" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="394" cy="59" r="4" fill="var(--indigo)"/><text class="nlabel" x="406" y="63">inventory-api</text></g><g><rect x="376" y="92" width="143" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="394" cy="111" r="4" fill="var(--indigo)"/><text class="nlabel" x="406" y="115">payments-api</text></g><g><rect x="24" y="40" width="140" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="42" cy="59" r="4" fill="var(--violet)"/><text class="nlabel" x="54" y="63">mobile-app</text></g><g><rect x="24" y="92" width="140" height="38" rx="10" fill="var(--card)" stroke="var(--line)" filter="url(#sf)"/><circle cx="42" cy="111" r="4" fill="var(--violet)"/><text class="nlabel" x="54" y="115">storefront</text></g><g><rect x="555" y="40" width="150" height="44" rx="10" fill="var(--slate-soft)" stroke="var(--slate)" stroke-opacity="0.55" stroke-dasharray="6 5" filter="url(#sf)"/><circle cx="573" cy="56" r="4" fill="none" stroke="var(--slate)" stroke-width="1.6"/><text class="nlabel" x="585" y="60" fill="var(--slate)">stripe/charg…</text><text x="585" y="73" font-family="var(--mono)" font-size="9.5" fill="var(--slate)" opacity="0.85">unresolved</text></g></svg></div>
+      </div><div class="card caps">
+        <div class="caps-head"><span class="sect-title">BEHAVIOR · EVERY CAPABILITY, WHAT IT DOES</span></div>
+        <div class="caps-grid"><div class="cap"><div class="ct"><span class="dot" style="background:var(--violet)"></span><h2>Browse catalog</h2></div><p>Customers list and search products; storefront and the mobile app both read the catalog service.</p><span class="via">catalog-api · storefront — 2 files</span></div><div class="cap"><div class="ct"><span class="dot" style="background:var(--blue)"></span><h2>Checkout</h2></div><p>Placing an order reserves inventory and charges payment.</p><span class="via">orders-api — 2 files</span></div><div class="cap"><div class="ct"><span class="dot" style="background:var(--indigo)"></span><h2>Authentication</h2></div><p>Sign-in for the storefront and mobile app.</p><span class="via">auth-api — 1 file</span></div></div>
+      </div><div class="footrail">
+        <span class="grounded"><svg><use href="#i-shield"></use></svg>Grounded · Leashed</span>
+        <span class="ft-note">Every node, edge, and capability is backed by file:line — the standing picture the shift card diffs against.</span>
+        <span class="spacer"></span>
+        <span class="hbit ext">1 unresolved external dependency</span>
+        <span class="hbit">demo</span>
+        <a class="ft-link" href="https://github.com/mappamind/mappamind/discussions">Feedback</a>
+      </div></section><section class="view view-shifts"><div class="tabhead"><h1>Shifts</h1><p>What each AI session changed.</p></div><div class="card"><div class="empty">No sessions recorded yet. End an agent session (the Stop hook) to see the first shift here.</div></div></section><section class="view view-caps"><div class="tabhead"><h1>Capabilities</h1><p>3 grounded — every member is a real file:line.</p></div><div class="card capx"><div class="ct"><span class="dot" style="background:var(--blue)"></span><h2>Browse catalog</h2><span class="tag">model · high</span></div><p>Customers list and search products; storefront and the mobile app both read the catalog service.</p><ul class="cites"><li><b>shopmesh</b>catalog-api/src/routes.ts:18 · listItems</li><li><b>shopmesh</b>storefront/src/api/catalog.ts:9 · getCatalog</li></ul></div><div class="card capx"><div class="ct"><span class="dot" style="background:var(--blue)"></span><h2>Checkout</h2><span class="tag">model · high</span></div><p>Placing an order reserves inventory and charges payment.</p><ul class="cites"><li><b>shopmesh</b>orders-api/src/routes.ts:22 · createOrder</li><li><b>shopmesh</b>orders-api/src/pay.ts:51 · charge</li></ul></div><div class="card capx"><div class="ct"><span class="dot" style="background:var(--blue)"></span><h2>Authentication</h2><span class="tag">model · high</span></div><p>Sign-in for the storefront and mobile app.</p><ul class="cites"><li><b>shopmesh</b>auth-api/src/routes.ts:5 · login</li></ul></div></section><section class="view view-contracts"><div class="tabhead"><h1>Contracts</h1><p>6 cross-boundary contracts · channels + external calls, recomputed from the current code.</p></div><div class="card"><div class="tblwrap"><table class="tbl"><thead><tr><th>Contract</th><th>Status</th><th>Type</th><th>Defined / called at</th><th>Refs</th></tr></thead><tbody><tr><td class="k">api/auth</td><td><span class="st verified">anchors verified</span><span class="st-note">relation inferred</span></td><td>http</td><td class="loc">auth-api/src/routes.ts:5</td><td>2</td></tr><tr><td class="k">api/catalog</td><td><span class="st verified">anchors verified</span><span class="st-note">relation inferred</span></td><td>http</td><td class="loc">catalog-api/src/routes.ts:18</td><td>2</td></tr><tr><td class="k">api/inventory</td><td><span class="st verified">anchors verified</span><span class="st-note">relation inferred</span></td><td>http</td><td class="loc">inventory-api/src/stock.ts:7</td><td>1</td></tr><tr><td class="k">api/orders</td><td><span class="st verified">anchors verified</span><span class="st-note">relation inferred</span></td><td>http</td><td class="loc">orders-api/src/routes.ts:22</td><td>1</td></tr><tr><td class="k">payments/charge</td><td><span class="st verified">anchors verified</span><span class="st-note">relation inferred</span></td><td>http</td><td class="loc">payments-api/src/charge.ts:11</td><td>1</td></tr><tr><td class="k">payments-api → stripe/charges</td><td><span class="st external">external</span></td><td>service call</td><td class="loc">payments-api/src/charge.ts:14</td><td>1</td></tr></tbody></table></div></div></section></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,247 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shopmesh · Added product search — wired storefront to a new service · mappamind</title>
+<style>:root{
+  --bg: oklch(96.8% 0.005 255); --shell: oklch(99.5% 0.001 255); --card: oklch(100% 0 0); --card2: oklch(100% 0 0);
+  --line: oklch(92.5% 0.006 255); --line-soft: oklch(95.5% 0.004 255);
+  --ink: oklch(28% 0.03 262); --dim: oklch(48% 0.022 262); --faint: oklch(62% 0.018 262);
+  --blue: oklch(54% 0.18 258); --blue-soft: oklch(96% 0.03 258);
+  --green: oklch(57% 0.15 152); --green-soft: oklch(96% 0.04 152);
+  --red: oklch(58% 0.21 27); --red-soft: oklch(96.5% 0.03 27);
+  --amber: oklch(58% 0.14 80); --amber-soft: oklch(96.5% 0.04 75);
+  --violet: oklch(55% 0.17 295); --indigo: oklch(50% 0.17 270);
+  --teal: oklch(58% 0.11 195); --cyan: oklch(56% 0.12 230);
+  --slate: oklch(55% 0.03 255); --slate-soft: oklch(95% 0.008 255);
+  --shadow-sm: 0 1px 2px oklch(40% 0.03 262 / 0.06), 0 1px 1px oklch(40% 0.03 262 / 0.04);
+  --shadow: 0 1px 2px oklch(40% 0.03 262 / 0.06), 0 6px 20px oklch(40% 0.03 262 / 0.07);
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --r: 14px;
+}
+body:has(#mm-dark:checked){
+  --bg: oklch(18% 0.012 262); --shell: oklch(20.5% 0.014 262); --card: oklch(23% 0.016 262); --card2: oklch(23% 0.016 262);
+  --line: oklch(31% 0.018 262); --line-soft: oklch(27% 0.016 262);
+  --ink: oklch(93% 0.01 262); --dim: oklch(72% 0.014 262); --faint: oklch(58% 0.016 262);
+  --blue: oklch(70% 0.15 258); --blue-soft: oklch(34% 0.06 258);
+  --green: oklch(72% 0.15 152); --green-soft: oklch(34% 0.07 152);
+  --red: oklch(68% 0.20 27); --red-soft: oklch(34% 0.08 27);
+  --amber: oklch(76% 0.14 70); --amber-soft: oklch(36% 0.06 70);
+  --violet: oklch(72% 0.13 295); --indigo: oklch(68% 0.14 270);
+  --teal: oklch(72% 0.10 195); --cyan: oklch(72% 0.11 230);
+  --slate: oklch(70% 0.03 255); --slate-soft: oklch(28% 0.02 255);
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3);
+  --shadow: 0 2px 4px oklch(0% 0 0 / 0.3), 0 8px 24px oklch(0% 0 0 / 0.28);
+}
+@media print{ .sidebar,.topbar{display:none} body{background:white} }
+*{box-sizing:border-box; margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased}
+#mm-dark,.mm-tab{position:absolute; opacity:0; pointer-events:none; width:0; height:0}
+.app{display:grid; grid-template-columns:232px 1fr; min-height:100vh}
+.sidebar{background:var(--shell); border-right:1px solid var(--line); padding:20px 14px; display:flex; flex-direction:column; gap:4px; position:sticky; top:0; height:100vh}
+.brand{display:flex; align-items:center; gap:9px; padding:4px 8px 18px}
+.brand .logo{width:34px; height:34px; flex:none}
+.brand b{font-size:17px; font-weight:600; letter-spacing:-0.02em; color:var(--ink)}
+.brand b i{font-style:normal; background:linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.nav{display:flex; flex-direction:column; gap:2px}
+.navlink{display:flex; align-items:center; gap:11px; padding:8px 11px; border-radius:9px; color:var(--dim); font-size:13.5px; text-decoration:none; font-weight:500; cursor:pointer; user-select:none}
+.navlink svg{width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.7; opacity:0.85}
+.navlink:hover{background:var(--line-soft); color:var(--ink)}
+.navlink.on{background:var(--blue); color:white; box-shadow:var(--shadow-sm)}
+.navlink.on svg{opacity:1}
+.side-card{margin-top:auto; background:var(--blue-soft); border:1px solid var(--line); border-radius:12px; padding:14px; display:flex; gap:11px; align-items:flex-start}
+.side-card .cloud{width:30px; height:30px; flex:none; border-radius:8px; background:var(--card); display:grid; place-items:center; box-shadow:var(--shadow-sm)}
+.side-card .cloud svg{width:18px; height:18px; stroke:var(--blue); fill:none; stroke-width:1.6}
+.side-card p{font-size:11.5px; line-height:1.45; color:var(--dim)}
+.side-card a{display:block; margin-top:6px; font-size:11.5px; color:var(--blue); text-decoration:none; font-weight:600}
+.main{min-width:0; display:flex; flex-direction:column}
+.topbar{display:flex; align-items:center; gap:12px; padding:14px 26px; border-bottom:1px solid var(--line); background:var(--shell); position:sticky; top:0; z-index:5}
+.crumb{font-size:13.5px; color:var(--faint); font-weight:500}
+.crumb b{color:var(--ink); font-weight:600}
+.crumb .sep{margin:0 8px; opacity:0.5}
+.topbar .spacer{flex:1}
+.pill{font-family:var(--sans); font-size:12.5px; color:var(--dim); font-weight:550; border:1px solid var(--line); border-radius:9px; padding:6px 12px; background:var(--card); cursor:pointer; display:inline-flex; align-items:center; gap:7px; user-select:none}
+.pill svg{width:13px; height:13px; stroke:var(--faint); fill:none; stroke-width:1.8}
+.pill .sun{display:none}
+body:has(#mm-dark:checked) .pill .sun{display:inline}
+body:has(#mm-dark:checked) .pill .moon{display:none}
+.avatar{width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg, var(--violet), var(--blue)); color:white; display:grid; place-items:center; font-size:12px; font-weight:650; position:relative}
+.avatar::after{content:""; position:absolute; right:-1px; bottom:-1px; width:9px; height:9px; border-radius:50%; background:var(--green); border:2px solid var(--shell)}
+.content{padding:26px; display:flex; flex-direction:column; gap:18px; max-width:1320px; width:100%}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow-sm)}
+.sect-title{font-size:11px; font-weight:650; letter-spacing:0.09em; color:var(--faint)}
+.ft-link{font-family:var(--sans); font-size:11px; font-weight:600; color:var(--blue); text-decoration:none}
+.ft-link:hover{text-decoration:underline}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:static; height:auto; flex-direction:row; flex-wrap:wrap; align-items:center; gap:6px; padding:12px 14px; border-right:none; border-bottom:1px solid var(--line)}
+  .brand{padding:0 8px 0 0}
+  .side-card{display:none}
+  .nav{flex-direction:row; flex-wrap:wrap; gap:4px; flex:1}
+  .navlink{padding:7px 10px; font-size:13px}
+  .content{padding:18px}
+}
+.shift{max-width:1100px; margin:0 auto; display:flex; flex-direction:column; gap:18px}
+
+.hdr{padding:24px 28px}
+.sev-row{display:flex; align-items:center; gap:11px; margin-bottom:15px; flex-wrap:wrap}
+.sev-tag{font-size:11px; font-weight:700; letter-spacing:0.08em; color:white; border-radius:6px; padding:4px 9px}
+.sev-red{background:var(--red)} .sev-amber{background:var(--amber); color:oklch(20% 0.02 70)} .sev-blue{background:var(--blue)} .sev-dim{background:var(--faint)}
+.sev-detail{font-family:var(--mono); font-size:12.5px; color:var(--dim)}
+h1{font-size:25px; line-height:1.25; font-weight:700; letter-spacing:-0.02em; margin-bottom:9px; text-wrap:balance}
+.changed{font-family:var(--mono); font-size:13px; color:var(--dim)}
+.behaviors{display:flex; align-items:center; gap:9px; margin-top:17px; flex-wrap:wrap}
+.lbl{font-size:11px; font-weight:650; letter-spacing:0.07em; color:var(--faint)}
+.chip{font-size:12.5px; font-weight:550; color:var(--dim); border:1px solid var(--line); border-radius:999px; padding:5px 13px}
+.chip.mute{color:var(--faint)}
+
+.pic{padding:20px 24px 22px}
+.pic-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:6px; flex-wrap:wrap}
+.legend{display:flex; gap:18px; flex-wrap:wrap; font-size:12px; color:var(--dim)}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.lk{display:inline-block; width:11px; height:11px; border-radius:3px; vertical-align:-1px}
+.lk.red{background:var(--red)} .lk.amber{background:var(--amber)} .lk.blue{background:var(--blue)} .lk.green{background:var(--green)}
+.incidents{display:flex; flex-direction:column; gap:18px; margin-top:8px}
+.igroup{display:flex; flex-direction:column; gap:10px}
+.iglabel{font-size:10.5px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase}
+.iglabel.red{color:var(--red)} .iglabel.amber{color:var(--amber)} .iglabel.blue{color:var(--blue)} .iglabel.green{color:var(--green)}
+.iblocks{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:12px}
+.iblock{border:1px solid var(--line); border-left:3px solid var(--line); border-radius:12px; padding:13px 15px; background:var(--card2)}
+.iblock.red{border-left-color:var(--red)} .iblock.amber{border-left-color:var(--amber)} .iblock.blue{border-left-color:var(--blue)} .iblock.green{border-left-color:var(--green)}
+.iblock.ghost{border-style:dashed}
+.ihead{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; margin-bottom:10px}
+.iroute{font-family:var(--mono); font-size:14px; font-weight:600; color:var(--ink); overflow-wrap:anywhere}
+.istat{font-size:11.5px; color:var(--dim)}
+.ifrom{display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+.ifrom.mute{color:var(--faint); font-size:12px}
+.iarrow{font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--faint); text-transform:uppercase}
+.ichip{font-size:12px; font-weight:600; border-radius:8px; padding:4px 10px}
+.ichip.red{color:var(--red); background:var(--red-soft)}
+.ichip.amber{color:var(--amber); background:var(--amber-soft)}
+.ichip.blue{color:var(--blue); background:var(--blue-soft)}
+.ichip.green{color:var(--green); background:var(--green-soft)}
+.fanout{font-family:var(--sans); font-size:13px; line-height:1.55; color:var(--dim); margin-top:15px; padding-top:14px; border-top:1px solid var(--line-soft)}
+
+.ripple-src{display:flex; align-items:center; gap:13px; margin:6px 0 18px; flex-wrap:wrap}
+.src-pill{font-family:var(--mono); font-size:13.5px; font-weight:600; color:var(--ink); background:var(--blue-soft); border:1px solid var(--line); border-radius:10px; padding:9px 14px}
+.src-note{font-size:12.5px; color:var(--faint)}
+.bands{display:flex; flex-direction:column; gap:9px}
+.band{display:grid; grid-template-columns:118px 1fr; gap:8px 18px; align-items:center;
+  border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:11px; padding:13px 16px}
+.band .bn{font-family:var(--mono); font-size:12.5px; color:var(--amber); font-weight:600}
+.band .bn b{font-size:21px; display:block; line-height:1.1}
+.band .bf{font-family:var(--mono); font-size:12.5px; color:var(--dim); line-height:1.7; overflow-wrap:anywhere}
+.mute{color:var(--faint)}
+
+.stats{display:flex; gap:14px; flex-wrap:wrap; margin:4px 0 18px}
+.stat{flex:1; min-width:120px; border:1px solid var(--line); border-radius:12px; padding:15px 17px}
+.stat .num{font-size:34px; font-weight:730; letter-spacing:-0.03em; line-height:1}
+.stat.warn .num{color:var(--amber)}
+.stat .unit{font-size:12px; color:var(--faint); margin-top:6px; line-height:1.35}
+.dist{display:flex; flex-direction:column; gap:7px; margin-bottom:18px}
+.distrow{display:flex; align-items:center; gap:11px; font-family:var(--mono); font-size:11.5px; color:var(--faint)}
+.distrow .dlabel{width:58px; flex:none}
+.distrow .dbar{flex:1; height:9px; background:var(--line-soft); border-radius:5px; overflow:hidden}
+.distrow .dbar i{display:block; height:100%; background:var(--amber); border-radius:5px}
+.distrow .dcount{width:46px; flex:none; text-align:right; color:var(--ink)}
+.entries ul{list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:11px; padding:0}
+.entries li{font-family:var(--mono); font-size:12.5px; color:var(--dim)}
+
+.surfaces{border-top:1px solid var(--line-soft); margin-top:18px; padding-top:16px; display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+.surf{font-family:var(--mono); font-size:11.5px; font-weight:500; color:var(--faint); border:1px solid var(--line-soft); border-radius:9px; padding:6px 11px}
+
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start}
+@media (max-width:900px){ .duo{grid-template-columns:1fr} }
+.panel{padding:20px 24px}
+.panel h2{font-size:11px; font-weight:680; letter-spacing:0.09em; color:var(--faint); margin-bottom:14px}
+.narr{font-size:15px; line-height:1.6; color:var(--ink); text-wrap:pretty}
+.ev{display:flex; flex-direction:column; gap:11px; list-style:none; padding:0}
+.ev li{display:flex; gap:10px; align-items:baseline; font-family:var(--mono); font-size:12.5px; line-height:1.5; flex-wrap:wrap}
+.ev .dot{width:8px; height:8px; border-radius:50%; flex:none; transform:translateY(1px)}
+.dot.red{background:var(--red)} .dot.green{background:var(--green)} .dot.blue{background:var(--blue)} .dot.amber{background:var(--amber)}
+.ev .loc{font-weight:600}
+.loc.red{color:var(--red)} .loc.green{color:var(--green)} .loc.blue{color:var(--blue)} .loc.amber{color:var(--amber)}
+.ev .fact{color:var(--faint)}
+.ev .ev-more{color:var(--faint); font-size:12px}
+
+.footrail{display:flex; align-items:center; gap:13px; flex-wrap:wrap; padding:14px 24px}
+.grounded{font-size:12.5px; font-weight:600; color:var(--green)}
+.ft-note{font-size:12.5px; color:var(--dim)}
+.footrail .spacer{flex:1}
+.hbit{font-size:12px; font-weight:550; color:var(--dim); background:var(--line-soft); border-radius:8px; padding:5px 11px}
+.hbit.ok{color:var(--green); background:var(--green-soft)}
+.hbit.warn{color:var(--amber); background:var(--amber-soft)}
+
+/* the diff-first channel hero */
+.chero{padding:20px 24px 22px}
+.crows{display:flex; flex-direction:column; gap:12px; margin-top:12px}
+.crow{border:1px solid var(--line); border-left:3px solid var(--amber); border-radius:12px; padding:14px 16px}
+.crow.green{border-left-color:var(--green)} .crow.red{border-left-color:var(--red)} .crow.amber{border-left-color:var(--amber)}
+.chead{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.ctag{font-size:10.5px; font-weight:700; letter-spacing:0.07em; color:white; border-radius:5px; padding:3px 8px}
+.ctag.green{background:var(--green)} .ctag.red{background:var(--red)} .ctag.amber{background:var(--amber); color:oklch(20% 0.02 70)}
+.cdesc{font-size:13.5px; color:var(--ink)} .cdesc code{font-family:var(--mono); font-weight:600}
+.cpill{font-size:11px; font-weight:600; border-radius:999px; padding:3px 10px}
+.cpill.ok{color:var(--green); background:var(--green-soft)}
+.cpill.gone{color:var(--red); background:var(--red-soft, color-mix(in oklab, var(--red) 14%, transparent))}
+.cpill.inf{color:var(--amber); background:var(--amber-soft)}
+.cnarr{font-size:13.5px; line-height:1.55; color:var(--dim); margin:9px 0 2px}
+.proof{display:flex; flex-direction:column; gap:6px; margin-top:10px; border-top:1px solid var(--line-soft); padding-top:10px}
+.prow{display:flex; gap:10px; align-items:baseline; font-family:var(--mono); font-size:12px; line-height:1.5; flex-wrap:wrap}
+.prole{font-weight:700; font-size:10px; letter-spacing:0.05em; text-transform:uppercase; border-radius:4px; padding:2px 6px}
+.prole.green{color:var(--green); background:var(--green-soft)} .prole.blue{color:var(--blue); background:var(--blue-soft)} .prole.amber{color:var(--amber); background:var(--amber-soft)}
+.proof .ploc{font-weight:600; color:var(--ink)} .proof .ptext{color:var(--faint)}
+.pic.backdrop{opacity:0.72}</style></head><body>
+<input type="checkbox" id="mm-dark" aria-hidden="true" tabindex="-1">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-shift" viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 14 2-8h6"/></symbol>
+<symbol id="i-service" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.5 8 11 16M16.5 8 13 16M8 6h8"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-contract" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h4"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-1A3.5 3.5 0 0 1 18 18z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+</defs></svg>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><svg class="logo" viewBox="0 0 48 48" fill="none" aria-hidden="true"><image href="data:image/png;base64,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" width="48" height="48"/></svg><b>mappa<i>mind</i></b></div>
+    <nav class="nav"><a class="navlink on" href="../index.html"><svg><use href="#i-shift"></use></svg>Shifts</a><a class="navlink" href="../index.html"><svg><use href="#i-service"></use></svg>Studio</a><a class="navlink" href="../index.html"><svg><use href="#i-grid"></use></svg>Capabilities</a><a class="navlink" href="../index.html"><svg><use href="#i-contract"></use></svg>Contracts</a></nav>
+    <div class="side-card"><span class="cloud"><svg><use href="#i-cloud"></use></svg></span><div><p>The system at rest. The shift card diffs against this baseline.</p></div></div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <span class="crumb"><b>Shifts</b><span class="sep">/</span>Added product search — wired storefront to a new service</span>
+      <span class="spacer"></span>
+      
+      <label class="pill" for="mm-dark"><svg class="moon"><use href="#i-moon"></use></svg><svg class="sun"><use href="#i-sun"></use></svg>Theme</label>
+      <div class="avatar">SA</div>
+    </div>
+    <div class="content"><div class="shift">
+  <div class="card hdr">
+    <div class="sev-row"><span class="sev-tag sev-amber">LOCAL</span><span class="sev-detail">0 contracts broken · 1 added</span></div>
+    <h1>Added product search — wired storefront to a new service</h1>
+    <div class="changed">added search-api · storefront/src/api/search.ts · 4 files</div>
+    <div class="behaviors"><span class="lbl">BEHAVIORS</span><span class="chip">Search</span></div>
+  </div>
+  <div class="card chero"><div class="pic-head"><span class="lbl">CHANNEL CHANGES · 1</span><span class="sev-detail">the session's verified cross-service deltas — each line is cited proof</span></div><div class="crows"><div class="crow green"><div class="chead"><span class="ctag green">ADDED</span><span class="cdesc"><code>api/search</code> · storefront → search-api · http</span><span class="cpill ok">Verified · anchors re-found</span><span class="cpill inf">relation inferred</span></div><div class="proof"><div class="prow"><span class="prole green">produce</span><span class="ploc">search-api · search-api/src/routes.ts:8</span><span class="ptext">api/search</span></div><div class="prow"><span class="prole blue">consume</span><span class="ploc">storefront · storefront/src/api/search.ts:5</span><span class="ptext">api/search</span></div></div></div></div></div>
+  <div class="card pic backdrop">
+    <div class="pic-head"><span class="lbl">CALLS FLOW · context</span><div class="legend"><span><i class="lk green"></i>added</span></div></div>
+    <div class="incidents"><div class="igroup"><div class="iglabel green">Added</div><div class="iblocks"><div class="iblock green"><div class="ihead"><span class="iroute">search-api</span><span class="istat">Added this session</span></div><div class="ifrom mute">no callers traced in this workspace</div></div></div></div></div>
+    
+  </div>
+  <div class="duo">
+    <div class="card panel"><h2>WHAT CHANGED</h2><p class="narr">The agent added a search service and a storefront client for it. No existing channel changed; nothing downstream is at risk.</p></div>
+    <div class="card panel"><h2>EVIDENCE</h2><ul class="ev"><li><span class="dot green"></span><span class="loc green">search-api</span><span class="fact">service added this session</span></li></ul></div>
+  </div>
+  <div class="card footrail">
+    <span class="grounded">Grounded · Leashed</span>
+    <span class="ft-note">Every node, edge, and number above is backed by a real code fact — nothing is guessed.</span>
+    <span class="spacer"></span>
+    <span class="hbit ok">Baseline fresh</span>
+    <a class="ft-link" href="https://github.com/mappamind/mappamind/discussions">Feedback</a>
+  </div>
+</div></div>
+  </div>
+</div>
+</body></html>
