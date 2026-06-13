@@ -1,0 +1,9 @@
+# Every change to every path requires review from a code owner (an org admin).
+# Combined with the `main` branch ruleset (require_code_owner_review), no pull
+# request merges without an org admin: contributors need this approval, and org
+# admins merge their own work via the ruleset's admin bypass.
+#
+# As the maintainer team grows, replace the line below with an org team, e.g.
+#   *  @mappamind/maintainers
+# and keep that team's membership = the people allowed to approve merges.
+*  @abhishekchaudhary

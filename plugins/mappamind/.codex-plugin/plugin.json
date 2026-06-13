@@ -1,0 +1,24 @@
+{
+  "name": "mappamind",
+  "version": "0.1.0",
+  "description": "Set up local architecture baselines and render grounded before/after impact cards for AI coding sessions.",
+  "author": {
+    "name": "Mappamind contributors",
+    "url": "https://github.com/mappamind/mappamind"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Mappamind",
+    "shortDescription": "Show what an agent session changed in your architecture.",
+    "longDescription": "Mappamind guides first-run baseline setup, records a before snapshot at session start, renders a grounded before/after shift card at stop, and surfaces local Studio/card URLs.",
+    "developerName": "Mappamind",
+    "category": "Developer Tools",
+    "capabilities": [
+      "First-run baseline setup",
+      "Lifecycle hooks",
+      "Architecture impact cards",
+      "Grounded code analysis"
+    ],
+    "defaultPrompt": "Set up Mappamind for this workspace."
+  }
+}
