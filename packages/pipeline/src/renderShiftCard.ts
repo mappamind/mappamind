@@ -90,7 +90,10 @@ function severityView(card: ShiftCard, slice: ImpactSlice, diff?: MeshDiff): Sev
   if (card.severity === "cosmetic") {
     return { label: "COSMETIC", cls: "sev-dim", detail: "nothing downstream" };
   }
-  if (alarming.length > 0) {
+  // A verified channel that lost its provider/consumer this session is an alarming
+  // break — consumers now call a route nobody serves — so it earns the red tag, even
+  // though the legacy brokenContracts path (mesh danglings) is empty in the channel pipeline.
+  if (alarming.length > 0 || brokenChannels > 0) {
     return { label: card.severity.toUpperCase(), cls: "sev-red", detail: detail.join(" · ") };
   }
   if (card.severity === "broad") {
@@ -470,13 +473,23 @@ function channelDescriptor(change: ChannelChange): string {
 function brokenNarrative(change: ChannelChange): string {
   const prior = change.priorChannel ?? change.channel;
   if (change.lostRole === "produce") {
-    const wasProvider = serviceList(prior, "produce").join(", ") || "the provider";
-    const stranded = serviceList(change.channel, "consume").join(", ") || "consumers";
-    return `${wasProvider} no longer provides ${change.channel.key}; ${stranded} still call it — they now hit a route nobody serves.`;
+    const wasProvider = serviceList(prior, "produce");
+    // A service that served AND called the route (role "both") and now only calls it is
+    // the gone provider, not an external stranded caller — don't list it on both sides.
+    const stranded = serviceList(change.channel, "consume").filter((s) => !wasProvider.includes(s));
+    const providerLabel = wasProvider.join(", ") || "the provider";
+    if (stranded.length === 0) {
+      return `${providerLabel} no longer serves ${change.channel.key} — the route now has no provider.`;
+    }
+    return `${providerLabel} no longer provides ${change.channel.key}; ${stranded.join(", ")} still call it — they now hit a route nobody serves.`;
   }
-  const provider = serviceList(change.channel, "produce").join(", ") || "the provider";
-  const wereConsumers = serviceList(prior, "consume").join(", ") || "its consumers";
-  return `${wereConsumers} no longer call ${change.channel.key}; ${provider} now serves a route with no caller.`;
+  const provider = serviceList(change.channel, "produce");
+  const wereConsumers = serviceList(prior, "consume").filter((s) => !provider.includes(s));
+  const providerLabel = provider.join(", ") || "the provider";
+  if (wereConsumers.length === 0) {
+    return `${change.channel.key} lost its last caller; ${providerLabel} now serves a route with no consumer.`;
+  }
+  return `${wereConsumers.join(", ")} no longer call ${change.channel.key}; ${providerLabel} now serves a route with no caller.`;
 }
 
 function renderChannelHero(changes: readonly ChannelChange[]): string {
@@ -615,8 +628,11 @@ export function renderShiftCardHtml(input: RenderShiftInput): string {
 .sev-row{display:flex; align-items:center; gap:11px; margin-bottom:15px; flex-wrap:wrap}
 .sev-tag{font-size:11px; font-weight:700; letter-spacing:0.08em; color:white; border-radius:6px; padding:4px 9px}
 .sev-red{background:var(--red)} .sev-amber{background:var(--amber); color:oklch(20% 0.02 70)} .sev-blue{background:var(--blue)} .sev-dim{background:var(--faint)}
+/* night theme makes the saturated accents light, so their tag text goes dark; the
+   dim (cosmetic) tag sits on a mid-grey fill where white reads better, so exclude it */
+body:has(#mm-dark:checked) .sev-tag:not(.sev-dim){color:var(--shell)}
 .sev-detail{font-family:var(--mono); font-size:12.5px; color:var(--dim)}
-h1{font-size:25px; line-height:1.25; font-weight:700; letter-spacing:-0.02em; margin-bottom:9px; text-wrap:balance}
+h1{font-family:var(--display); font-size:31px; line-height:1.12; font-weight:600; letter-spacing:-0.01em; margin-bottom:9px; text-wrap:balance; color:var(--parch)}
 .changed{font-family:var(--mono); font-size:13px; color:var(--dim)}
 .behaviors{display:flex; align-items:center; gap:9px; margin-top:17px; flex-wrap:wrap}
 .lbl{font-size:11px; font-weight:650; letter-spacing:0.07em; color:var(--faint)}

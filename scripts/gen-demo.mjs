@@ -9,6 +9,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 
 import { renderShiftCardHtml } from "../packages/pipeline/dist/renderShiftCard.js";
 import { renderAppHtml } from "../packages/pipeline/dist/renderApp.js";
+import { FONT_FACE } from "../packages/pipeline/dist/theme.js";
 
 const OUT = "docs/examples";
 mkdirSync(OUT, { recursive: true });
@@ -149,35 +150,56 @@ writeFileSync(`${OUT}/studio.html`, renderAppHtml({ title: "shopmesh", baseline,
 
 // ---- the gallery landing (docs/index.html) ---------------------------------------
 const card = (href, tag, tagClass, title, desc) =>
-  `<a class="ex" href="${href}"><div class="extag ${tagClass}">${tag}</div><h3>${title}</h3><p>${desc}</p><span class="open">Open example →</span></a>`;
+  `<a class="ex" href="${href}"><span class="cn c1"></span><span class="cn c2"></span><span class="cn c3"></span><span class="cn c4"></span>` +
+  `<div class="extag ${tagClass}">${tag}</div><h3>${title}</h3><p>${desc}</p><span class="open">Open chart →</span></a>`;
+// Self-contained paper grain (no external asset), matching the product surfaces.
+const GRAIN = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 const index = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mappamind — live examples</title>
-<style>
-:root{color-scheme:light dark}
-*{box-sizing:border-box}
-body{margin:0;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f6f7f9;color:#11161c;line-height:1.55}
-@media (prefers-color-scheme:dark){body{background:#11151b;color:#e7ebf0}.ex{background:#1a1f27;border-color:#2a313c}.head p{color:#9aa6b2}.ex p{color:#9aa6b2}}
-.wrap{max-width:1000px;margin:0 auto;padding:56px 24px 80px}
-.head{text-align:center;margin-bottom:44px}
-.head h1{font-size:30px;margin:0 0 10px;letter-spacing:-0.02em}
-.head p{font-size:16px;color:#5b6770;margin:0 auto;max-width:620px}
-.head .sub{font-size:13.5px;margin-top:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
-.ex{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid #e6e9ee;border-radius:16px;padding:22px 22px 20px;transition:transform .12s ease,box-shadow .12s ease}
-.ex:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(20,30,50,.10)}
-.extag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:4px 9px;margin-bottom:12px}
-.extag.red{color:#c0392b;background:#fdecea}.extag.amber{color:#9a6a00;background:#fbf0d9}.extag.green{color:#1f8a4c;background:#e6f6ec}.extag.blue{color:#2b6cb0;background:#e8f0fb}
-.ex h3{margin:0 0 6px;font-size:17px}
-.ex p{margin:0 0 14px;font-size:13.5px;color:#5b6770}
-.open{font-size:13px;font-weight:600;color:#2f6df0}
-.foot{text-align:center;margin-top:40px;font-size:13px;color:#7a8590}
-.foot a{color:#2f6df0;text-decoration:none}
+<style>${FONT_FACE}
+:root{
+  --bg:#07131b; --card:#0c1f2b; --line:rgba(124,178,186,0.16); --line-soft:rgba(124,178,186,0.09);
+  --parch:#ece0c4; --ink:#dde6e3; --dim:#a3b4b5; --faint:#6d8284;
+  --brass:#cea451; --brass-hi:#ecc472;
+  --red:#e0785a; --green:#84b393; --blue:#74bcc4; --amber:#d6a44e;
+  --display:"Cormorant","Iowan Old Style",Palatino,Georgia,serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:Georgia,"Times New Roman",serif;line-height:1.6;color:var(--ink);-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 90% at 80% -10%,rgba(18,50,67,0.6) 0,transparent 55%),radial-gradient(130% 100% at 0% 110%,rgba(10,34,49,0.5) 0,transparent 50%),var(--bg)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:0.06;mix-blend-mode:soft-light;background-image:${GRAIN}}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(125% 110% at 50% 35%,transparent 55%,rgba(2,8,12,0.5) 100%)}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:64px 24px 90px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--brass);text-align:center;margin-bottom:18px}
+.head{text-align:center;margin-bottom:50px}
+.head h1{font-family:var(--display);font-weight:600;font-size:clamp(38px,6vw,60px);line-height:1.02;letter-spacing:-0.01em;color:var(--parch);margin-bottom:18px}
+.head h1 em{font-style:italic;color:var(--brass-hi)}
+.head p{font-size:17px;color:var(--dim);max-width:600px;margin:0 auto;text-wrap:pretty}
+.head .sub{font-family:var(--mono);font-size:12px;letter-spacing:0.06em;margin-top:22px}
+.head a{color:var(--brass-hi);text-decoration:none;border-bottom:1px solid var(--brass)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.ex{position:relative;display:block;text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--card),#0a1a24);border:1px solid var(--line);padding:26px 26px 22px;transition:transform .15s ease,border-color .15s ease}
+.ex::before{content:"";position:absolute;inset:6px;border:1px solid var(--line-soft);pointer-events:none}
+.ex:hover{transform:translateY(-3px);border-color:var(--brass)}
+.cn{position:absolute;width:9px;height:9px;border:1px solid var(--brass);opacity:0.65}
+.cn.c1{top:-1px;left:-1px;border-right:0;border-bottom:0}.cn.c2{top:-1px;right:-1px;border-left:0;border-bottom:0}
+.cn.c3{bottom:-1px;left:-1px;border-right:0;border-top:0}.cn.c4{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.extag{position:relative;display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border-radius:999px;padding:4px 11px;margin-bottom:14px}
+.extag.red{color:var(--red);background:rgba(224,120,90,0.14)}.extag.green{color:var(--green);background:rgba(132,179,147,0.14)}
+.extag.blue{color:var(--blue);background:rgba(116,188,196,0.14)}.extag.amber{color:var(--amber);background:rgba(214,164,78,0.14)}
+.ex h3{position:relative;font-family:var(--display);font-weight:600;font-size:21px;color:var(--parch);margin-bottom:8px;line-height:1.15}
+.ex p{position:relative;font-size:14px;color:var(--dim);margin-bottom:16px}
+.open{position:relative;font-family:var(--mono);font-size:12px;letter-spacing:0.06em;color:var(--brass-hi)}
+.foot{text-align:center;margin-top:48px;font-family:var(--mono);font-size:11px;letter-spacing:0.07em;color:var(--faint)}
+.foot a{color:var(--brass);text-decoration:none}
 </style></head>
 <body><div class="wrap">
+<div class="eyebrow">A chart of your system · at the accept moment</div>
 <div class="head">
-<h1>Mappamind — live examples</h1>
-<p>See what an AI coding agent did to a system's architecture: grounded in real code, visual, shown at the accept moment. These are static example cards from a fictional storefront — exactly what Mappamind renders for your own repo.</p>
-<p class="sub"><a href="https://github.com/mappamind/mappamind">← Back to the repo</a></p>
+<h1>See the <em>new world</em><br>your agent just drew.</h1>
+<p>What an AI coding agent did to a system's architecture — grounded in real code, drawn the moment you decide whether to accept it. These are static example cards from a fictional storefront, exactly what Mappamind renders for your own repo.</p>
+<p class="sub"><a href="https://github.com/mappamind/mappamind">← back to the repo</a></p>
 </div>
 <div class="grid">
 ${card("examples/shift-broken.html", "Broken channel", "red", "A rename broke a cross-service call", "An agent renamed a route on the provider but left two callers on the old path. The card flags the break and cites every stranded caller.")}
@@ -185,7 +207,7 @@ ${card("examples/shift-multi.html", "Multiple breaks", "red", "Three boundaries 
 ${card("examples/shift-healthy.html", "Healthy", "green", "A calm, additive session", "An agent added a search service. Nothing existing changed — the card says so plainly instead of inventing alarm.")}
 ${card("examples/studio.html", "Studio", "blue", "The standing architecture", "The grounded picture a shift card diffs against: services, cross-service channels, and capabilities — every node backed by a real file:line.")}
 </div>
-<div class="foot">Every claim cites a real code fact or it is dropped. <a href="https://github.com/mappamind/mappamind">github.com/mappamind/mappamind</a></div>
+<div class="foot">Every claim cites a real code fact — or it is struck from the chart. · <a href="https://github.com/mappamind/mappamind">github.com/mappamind/mappamind</a></div>
 </div></body></html>`;
 writeFileSync("docs/index.html", index);
 writeFileSync("docs/.nojekyll", "");

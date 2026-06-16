@@ -91,11 +91,13 @@ export function verifyChannels(channels: readonly Channel[], facts: readonly Fil
 
 // --- Identity & cache (determinism) ---------------------------------------------
 
-// Stable identity of a channel: its key + the set of services it connects. Used for
-// set-based diffing across runs (position-independent, §I5).
+// Stable identity of a channel: its normalized KEY. surfaceChannelCandidates yields
+// exactly one channel per key (all services sharing a key merge into one M×N channel),
+// so the key alone is a position-independent id (§I5). Keying on the first/last service
+// instead collapsed distinct service sets and mis-tracked member/producer changes across
+// runs (a renamed-away provider read as a benign "changed" instead of a break).
 export function channelId(channel: Channel): string {
-  const services = [...new Set(channel.memberships.map((m) => m.service))].sort();
-  return channelClaimId(channel.key, services[0] ?? "", services[services.length - 1] ?? "");
+  return channelClaimId(channel.key, "", "");
 }
 
 // Hash of a candidate's EVIDENCE — its endpoints (file+text), order-independent. If

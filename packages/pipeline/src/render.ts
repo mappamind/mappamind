@@ -40,7 +40,7 @@ export function viaLine(cap: Capability): string {
 // Column = call depth (left → right). Color is a depth gradient only — it makes
 // adjacent columns legible; it does NOT claim a semantic tier (the honest rename:
 // column 0 = ENTRY, columns 1..N = DEPTH n, the dashed ghost column = UNRESOLVED).
-const TIER_COLORS = ["var(--violet)", "var(--blue)", "var(--indigo)", "var(--teal)", "var(--cyan)"];
+const TIER_COLORS = ["var(--brass)", "var(--blue)", "var(--indigo)", "var(--teal)", "var(--cyan)"];
 
 // Caption for a real (non-ghost) column: column 0 is the entry layer; deeper
 // columns are labelled by call depth (column 1 → "DEPTH 2", matching "calls flow
@@ -279,7 +279,7 @@ export function capCard(cap: Capability, index: number): string {
 export const STUDIO_CSS = `.hdr{padding:24px 28px; display:flex; align-items:flex-start; gap:24px; flex-wrap:wrap}
 .hdr-main{flex:1; min-width:340px}
 .eyebrow{font-size:11px; font-weight:650; letter-spacing:0.09em; color:var(--faint); margin-bottom:11px}
-h1{font-size:25px; line-height:1.2; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px}
+h1{font-family:var(--display); font-size:32px; line-height:1.08; font-weight:600; letter-spacing:-0.01em; margin-bottom:8px; color:var(--parch)}
 .meta{font-family:var(--mono); font-size:12.5px; color:var(--dim)}
 .badge{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--green); background:var(--green-soft); border-radius:999px; padding:6px 13px}
 .badge svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:1.7}
@@ -290,7 +290,7 @@ h1{font-size:25px; line-height:1.2; font-weight:700; letter-spacing:-0.02em; mar
 .legend i{width:9px; height:9px; border-radius:50%; display:inline-block; font-style:normal}
 .legend .ext{width:14px; height:0; border-top:2px dashed var(--slate); border-radius:0}
 .legend .solo{background:transparent; border:1.5px solid var(--faint)}
-.meshwrap{overflow:auto; max-height:540px; margin-top:6px; border:1px solid var(--line-soft); border-radius:10px}
+.meshwrap{overflow:auto; max-height:540px; margin-top:6px; border:1px solid var(--line-soft); border-radius:10px; background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px); background-size:34px 34px}
 .mesh{display:block; margin:12px 16px}
 .mesh text{font-family:var(--mono)}
 .col-cap{font-size:10.5px; letter-spacing:0.1em; font-weight:700; fill:var(--faint)}
@@ -305,7 +305,7 @@ h1{font-size:25px; line-height:1.2; font-weight:700; letter-spacing:-0.02em; mar
 .cap{border:1px solid var(--line); border-radius:12px; padding:15px 16px; display:flex; flex-direction:column; gap:8px; background:var(--card)}
 .cap .ct{display:flex; align-items:center; gap:9px; flex-wrap:wrap}
 .cap .dot{width:9px; height:9px; border-radius:50%; flex:none}
-.cap h2{font-size:14.5px; font-weight:650}
+.cap h2{font-family:var(--display); font-size:17px; font-weight:600; color:var(--parch)}
 .cap .conf{font-size:10px; font-weight:600; color:var(--faint); background:var(--line-soft); border-radius:6px; padding:2px 7px; letter-spacing:0.02em}
 .cap p{font-size:12.5px; line-height:1.5; color:var(--dim); text-wrap:pretty; flex:1}
 .cap .via{font-family:var(--mono); font-size:10.5px; color:var(--faint); padding-top:8px; border-top:1px solid var(--line-soft)}

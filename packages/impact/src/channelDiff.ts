@@ -45,36 +45,30 @@ export function diffChannels(
   const beforeById = new Map(before.map((c) => [channelId(c), c]));
   const afterById = new Map(after.map((c) => [channelId(c), c]));
   const changes: ChannelChange[] = [];
-  // BEFORE channels paired off as the source of a "broken" change — they must not
-  // also be reported as a plain "removed".
-  const consumedBeforeIds = new Set<string>();
 
   for (const [id, channel] of afterById) {
     const prior = beforeById.get(id);
     if (!prior) {
-      // A new channel id with one side missing is usually NOT a new channel — it is a
-      // fully-wired BEFORE channel (same key) that lost its provider or consumer this
-      // session (losing a member changes the service set, hence the id). Surface that
-      // as a break, never as a green "added · verified" channel (§I3, honest-over-hidden).
-      const w = wiring(channel);
-      const lostRole = !w.producer ? "produce" : !w.consumer ? "consume" : undefined;
-      const priorWired =
-        lostRole &&
-        before.find(
-          (b) => b.key === channel.key && !afterById.has(channelId(b)) && wiring(b).producer && wiring(b).consumer
-        );
-      if (lostRole && priorWired) {
-        consumedBeforeIds.add(channelId(priorWired));
-        changes.push({ change: "broken", channel, verified: false, lostRole, priorChannel: priorWired });
-      } else {
-        changes.push({ change: "added", channel, verified: allVerified(channel) });
+      // A key not present before — a genuinely new channel.
+      changes.push({ change: "added", channel, verified: allVerified(channel) });
+    } else {
+      // Same channel — identity is the normalized key (one channel per key), so a route
+      // that lost a member keeps its id and lands here. Losing a WHOLE side this session
+      // (the producer, or every consumer) is a BREAK, not a benign "changed": consumers
+      // now call a route nobody serves, or a provider is left with no caller (§I3). A
+      // member swap or anchor move that keeps both sides is a "changed".
+      const wPrior = wiring(prior);
+      const wNow = wiring(channel);
+      const lostRole = wPrior.producer && !wNow.producer ? "produce" : wPrior.consumer && !wNow.consumer ? "consume" : undefined;
+      if (lostRole) {
+        changes.push({ change: "broken", channel, verified: false, lostRole, priorChannel: prior });
+      } else if (channelAnchorHash(prior) !== channelAnchorHash(channel) || prior.kind !== channel.kind) {
+        changes.push({ change: "changed", channel, verified: allVerified(channel) });
       }
-    } else if (channelAnchorHash(prior) !== channelAnchorHash(channel) || prior.kind !== channel.kind) {
-      changes.push({ change: "changed", channel, verified: allVerified(channel) });
     }
   }
   for (const [id, channel] of beforeById) {
-    if (!afterById.has(id) && !consumedBeforeIds.has(id)) changes.push({ change: "removed", channel, verified: false });
+    if (!afterById.has(id)) changes.push({ change: "removed", channel, verified: false });
   }
 
   // Deterministic order: broken first (the live risk), then added, changed, removed.

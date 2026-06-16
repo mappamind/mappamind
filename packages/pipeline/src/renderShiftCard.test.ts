@@ -308,3 +308,48 @@ test("no channel changes → no hero section, card still renders", () => {
   assert.ok(!html.includes("CHANNEL CHANGES"), "hero omitted when there are no channel changes");
   assertOfflineSafe(html);
 });
+
+test("a broken channel earns the red severity tag (not amber advisory)", () => {
+  // The eShop regression: a route that lost its provider must read as alarming, even
+  // though the legacy brokenContracts path is empty in the channel pipeline.
+  const broken: ChannelChange = {
+    change: "broken",
+    verified: false,
+    lostRole: "produce",
+    channel: { key: "api/orders", kind: "http", rationale: "",
+      memberships: [{ service: "web", role: "consume", confidence: "verified", anchor: { service: "web", file: "web/o.ts", line: 1, text: "api/orders" } }] },
+    priorChannel: { key: "api/orders", kind: "http", rationale: "",
+      memberships: [
+        { service: "web", role: "consume", confidence: "verified", anchor: { service: "web", file: "web/o.ts", line: 1, text: "api/orders" } },
+        { service: "orders", role: "produce", confidence: "verified", anchor: { service: "orders", file: "orders/api.ts", line: 9, text: "api/orders" } }
+      ] }
+  };
+  const html = renderShiftCardHtml({ card: cardOf({ severity: "broad", channelChanges: [broken] }), slice: sliceOf({ changedPaths: ["orders/api.ts"], cosmetic: false }) });
+  assert.ok(html.includes('class="sev-tag sev-red">BROAD<'), "broken channel → red BROAD tag");
+  assert.ok(!html.includes("BROAD · ADVISORY"), "not downgraded to amber advisory");
+  assert.ok(html.includes(">BROKEN<"), "hero shows the BROKEN change");
+});
+
+test("broken narrative does not list a 'both'→consume service as both gone-provider and stranded caller", () => {
+  // mid served AND called the route; it stops serving but still calls. It is the gone
+  // provider, not an external stranded caller — the narrative must not name it on both sides.
+  const broken: ChannelChange = {
+    change: "broken",
+    verified: false,
+    lostRole: "produce",
+    channel: { key: "api/orders", kind: "http", rationale: "",
+      memberships: [
+        { service: "mid", role: "consume", confidence: "verified", anchor: { service: "mid", file: "mid/o.ts", line: 1, text: "api/orders" } },
+        { service: "web", role: "consume", confidence: "verified", anchor: { service: "web", file: "web/o.ts", line: 1, text: "api/orders" } }
+      ] },
+    priorChannel: { key: "api/orders", kind: "http", rationale: "",
+      memberships: [
+        { service: "mid", role: "both", confidence: "verified", anchor: { service: "mid", file: "mid/o.ts", line: 1, text: "api/orders" } },
+        { service: "web", role: "consume", confidence: "verified", anchor: { service: "web", file: "web/o.ts", line: 1, text: "api/orders" } }
+      ] }
+  };
+  const html = renderShiftCardHtml({ card: cardOf({ severity: "broad", channelChanges: [broken] }), slice: sliceOf({ changedPaths: ["mid/o.ts"], cosmetic: false }) });
+  assert.ok(html.includes("mid no longer provides"), "mid named as the gone provider");
+  assert.ok(html.includes("web still call"), "web is the stranded caller");
+  assert.ok(!html.includes("mid, web still call") && !html.includes("web, mid still call"), "mid is not also listed as stranded");
+});

@@ -45,15 +45,15 @@ const TABS = [
 const APP_CSS = `${STUDIO_CSS}
 .view{display:none}
 ${TABS.map((t) => `body:has(#${t.id}:checked) .${t.view}`).join(",\n")}{display:flex; flex-direction:column; gap:18px}
-${TABS.map((t) => `body:has(#${t.id}:checked) label[for="${t.id}"]`).join(",\n")}{background:var(--blue); color:white; box-shadow:var(--shadow-sm)}
+${TABS.map((t) => `body:has(#${t.id}:checked) label[for="${t.id}"]`).join(",\n")}{background:var(--brass-soft); color:var(--brass-hi); box-shadow:inset 0 0 0 1px var(--line)}
 ${TABS.map((t) => `body:has(#${t.id}:checked) label[for="${t.id}"] svg`).join(",\n")}{opacity:1}
 .tabhead{padding:22px 26px 0}
-.tabhead h1{font-size:21px; margin-bottom:4px}
+.tabhead h1{font-family:var(--display); font-size:28px; font-weight:600; letter-spacing:-0.01em; color:var(--parch); margin-bottom:4px}
 .tabhead p{font-size:13px; color:var(--dim)}
 .capx{padding:18px 20px}
 .capx .ct{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:7px}
 .capx .dot{width:9px; height:9px; border-radius:50%; flex:none}
-.capx h2{font-size:16px; font-weight:660}
+.capx h2{font-family:var(--display); font-size:20px; font-weight:600; color:var(--parch)}
 .capx .tag{font-size:10px; font-weight:600; color:var(--faint); background:var(--line-soft); border-radius:6px; padding:2px 7px; letter-spacing:0.02em}
 .capx p{font-size:13.5px; line-height:1.55; color:var(--dim); margin-bottom:12px; text-wrap:pretty}
 .cites{list-style:none; display:flex; flex-direction:column; gap:5px; border-top:1px solid var(--line-soft); padding-top:11px}
@@ -77,6 +77,7 @@ ${TABS.map((t) => `body:has(#${t.id}:checked) label[for="${t.id}"] svg`).join(",
 .shiftrow:hover{background:var(--line-soft)}
 .shiftrow .sev{font-size:10px; font-weight:700; letter-spacing:0.06em; color:white; border-radius:6px; padding:3px 8px; flex:none; min-width:62px; text-align:center}
 .sev.broad{background:var(--amber); color:oklch(22% 0.02 70)} .sev.local{background:var(--blue)} .sev.cosmetic{background:var(--faint)}
+body:has(#mm-dark:checked) .shiftrow .sev:not(.cosmetic){color:var(--shell)}
 .shiftrow .st-body{display:flex; flex-direction:column; min-width:0}
 .shiftrow .st-title{font-weight:600; color:var(--ink); font-size:13.5px}
 .shiftrow .st-meta{font-family:var(--mono); font-size:11.5px; color:var(--faint); margin-top:2px}
