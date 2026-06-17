@@ -1,0 +1,57 @@
+name: False positive / confusing card
+description: A card overstated impact, fired on a cosmetic change, or made a claim you couldn't trace to real code.
+title: "[card] "
+labels: ["false-positive", "grounding"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mappamind's core promise is that **every claim cites a real code fact or is dropped**.
+        A card that breaks that promise is a real bug — thank you for catching it.
+  - type: textarea
+    id: claim
+    attributes:
+      label: What the card claimed
+      description: Quote the wording, or attach a screenshot of the card.
+    validations:
+      required: true
+  - type: textarea
+    id: reality
+    attributes:
+      label: What was actually true
+      description: Why the claim was wrong, overstated, or confusing.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem is it?
+      options:
+        - Claimed impact that wasn't real (overstated)
+        - Fired on a cosmetic / leaf-only change that should have folded
+        - Claim couldn't be traced to a file:line (ungrounded)
+        - Wording was confusing / hard to act on
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: The change that triggered it
+      description: Roughly what the agent/session edited (files, routes, services). No private code required.
+  - type: input
+    id: version
+    attributes:
+      label: Mappamind version
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Model host
+      options:
+        - claude
+        - codex
+        - none (--no-model / deterministic fallback)
+    validations:
+      required: true

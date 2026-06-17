@@ -2,24 +2,20 @@
 
 <img src="assets/logo-mark.png" alt="Mappamind" width="116" />
 
-### See what your AI coding agent just did to your system's behavior, flow, and architecture.
+# Visual mental models for AI-generated code changes
 
-Grounded in real code. Visual. In-session, at the moment you decide whether to accept the change.
+Before you accept an agent's diff, see what changed in **behavior, flow, contracts, and architecture** — with every claim grounded in real code.
 
 [![CI](https://github.com/mappamind/mappamind/actions/workflows/ci.yml/badge.svg)](https://github.com/mappamind/mappamind/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/mappamind-cli.svg)](https://www.npmjs.com/package/mappamind-cli)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen.svg)](#requirements)
 
-[Quickstart](#quickstart) · [Commands](#common-commands) · [Agent setup](#agent-setup) · [Storage](#storage-and-privacy) · [Coverage](#what-it-covers) · [Discussions](https://github.com/mappamind/mappamind/discussions)
+[See it fast](#see-it-fast) · [What the card shows](#what-the-card-shows) · [Quickstart](#quickstart) · [Commands](#common-commands) · [Agent setup](#agent-setup) · [Coverage](#what-it-covers) · [Discussions](https://github.com/mappamind/mappamind/discussions)
 
 </div>
 
 ---
-
-As agents write more of the code, your job shifts from **author** to **supervisor** — and supervision is where the mental model breaks. You didn't write the change, so you can't feel what moved. A 40-file agent diff is unreadable as a line-diff.
-
-Mappamind builds an evidence-grounded picture of your codebase's behavior, flow, and architecture. When an agent session shifts it, you get a **before/after picture** at the accept moment: an alarm that draws. Agent dashboards render text. Mappamind is the picture they are missing.
 
 <div align="center">
 <img src="docs/assets/shift-card.png" alt="A Mappamind shift card: an agent renamed the orders route, so the api/orders channel is flagged BROKEN with two stranded callers (storefront and the mobile app) cited by file and line, plus a calls-flow panel marking the orders provider as changed and the two callers at risk" width="820" />
@@ -27,28 +23,40 @@ Mappamind builds an evidence-grounded picture of your codebase's behavior, flow,
 <p><b><a href="https://mappamind.github.io/mappamind/">▶ See live examples →</a></b> · static cards from a fictional storefront, exactly what Mappamind renders for your repo</p>
 </div>
 
-## Why Mappamind
+## Why this exists
 
-Every claim on the card is **grounded** — it cites a real code fact or it gets dropped. The model cannot invent an endpoint or a dependency; both ends of every edge come from facts in your code. That is what lets you accept or reject on the picture: it is exactly correct, never a plausible lie about your architecture.
+AI agents can write a lot of code in one session. A 40-file diff is normal now — and you didn't author it.
 
-- **At the accept moment, not at PR time.** The card fires from the agent-session boundary (a `Stop` hook), in-session, while the change is still in your hands.
-- **Bounded by the change, not the repo.** A code graph shrinks the work to the affected slice, so cost and latency track the diff, not the codebase size.
-- **No false alarms.** A comment or leaf-only change folds as cosmetic and never rings.
-- **Self-contained output.** Cards and the Studio are a single HTML file: no server, no `<script>`, no external assets. Open offline, share as one file.
+When you didn't write the change, **you lose the mental model.** A line diff shows you the text that moved, but not what it *did*: which behaviors changed, which service calls now break, which consumers are stranded, what shifted in your architecture.
 
-## What You Get
+Mappamind draws that picture. At the accept moment — in-session, while the change is still in your hands — it renders an evidence-grounded **before/after** of your system so you can decide **Accept / Reject / Correct** on the impact, not just the text.
 
-Mappamind writes one Studio file during setup, then adds shift cards when agent sessions change code:
+Every claim on the card cites a real code fact or it is dropped. The model cannot invent an endpoint or a dependency; both ends of every edge come from facts in your code. When the evidence isn't there, Mappamind stays quiet rather than inventing architecture.
 
-```text
-.mappamind/
-├── index.html                 # Studio: mesh, shifts, capabilities, contracts
-└── shift/
-    ├── latest.html            # latest non-cosmetic shift card
-    └── <timestamp>.html       # archived cards linked from the Studio
-```
+## See it fast
 
-The durable baseline and channel cache live beside these files under `.mappamind/state/`. See [Storage and privacy](#storage-and-privacy).
+Two ways to get the idea before installing anything:
+
+1. **Open the live gallery** → **[mappamind.github.io/mappamind](https://mappamind.github.io/mappamind/)** — real example cards (a broken channel, multiple breaks, a calm session, the Studio), exactly what Mappamind renders for a repo.
+2. **Point it at any local repo, read-only, no model calls:**
+
+   ```sh
+   npx -p mappamind-cli mappamind status <path-to-repo>
+   ```
+
+   This discovers repos, reports baseline freshness, and prints the Studio URL — without building anything or shelling out to a model.
+
+To render a real before/after card for **your** repo, run the three-step [Quickstart](#quickstart) below. (That step needs a model CLI on your `PATH` and makes real model calls, so it isn't instant — but it's a few seconds on a small-to-medium repo.)
+
+## What the card shows
+
+A shift card is a single self-contained HTML page. In plain language, it tells you:
+
+- **Changed behavior** — a grounded narration of what the session actually did, not a restatement of the diff.
+- **Impacted channels and contracts** — cross-service calls that were **added**, **changed**, or **broken** (a route a caller still hits but nothing serves).
+- **Callers / consumers at risk** — every stranded caller or downstream consumer, named so you know who breaks.
+- **Evidence** — each claim is anchored to a real `file:line` in your code; you can click through and check it.
+- **Grounded fallback** — when there isn't enough evidence, or no model host is available, the card falls back to deterministic narration instead of guessing. Cosmetic or leaf-only changes are folded when detected, so the card stays quiet rather than ringing for a no-op.
 
 ## Install
 
@@ -90,6 +98,20 @@ mappamind setup . --host claude --force --yes
 ```
 
 Use `--host claude` or `--host codex` every time you run setup. Agent skills should pass the host they are running under.
+
+### What you get on disk
+
+Mappamind writes one Studio file during setup, then adds shift cards when agent sessions change code:
+
+```text
+.mappamind/
+├── index.html                 # Studio: mesh, shifts, capabilities, contracts
+└── shift/
+    ├── latest.html            # latest non-cosmetic shift card
+    └── <timestamp>.html       # archived cards linked from the Studio
+```
+
+The durable baseline and channel cache live beside these files under `.mappamind/state/`. See [Storage and privacy](#storage-and-privacy).
 
 ## Agent Setup
 
@@ -176,11 +198,26 @@ Mappamind reads source locally with tree-sitter and shells out to a model CLI al
 MAPPAMIND_OPEN=0 mappamind shift .
 ```
 
-## Cost and Latency
+See [PRIVACY.md](PRIVACY.md) for the full statement: no telemetry, local-only storage, and exactly what is sent to the model CLI you choose.
 
-The first baseline is the expensive step because Mappamind reads the workspace and asks the model to synthesize grounded capabilities. Per-session shift cards are smaller: they diff against the before snapshot, traverse only the affected graph slice, fold cosmetic changes, and avoid model calls when nothing downstream is hit.
+## What it covers
 
-Today Mappamind re-reads the tree each session. For large repositories, `status`, `setup`, and `shift` print a large-repo advisory instead of hiding the cost. A token-usage chart belongs in benchmarks once the eval data is stable; until then, the README should avoid implying a precise cost curve.
+Tree-sitter facts across **17 languages** out of the box (TypeScript, JavaScript, Go, Python, Java, C#, C, C++, PHP, Ruby, Rust, Kotlin, Swift, Scala, Dart, shell, and more). New language or framework coverage is a prompt and a schema, not new parsing code.
+
+### Good for
+
+- **Frontend + backend repos** — a web app talking to its API.
+- **Service architectures** — microservices that call each other across a boundary.
+- **Multi-repo workspaces** — a suite of repos analyzed together, with cross-repo channels.
+- **Agent-generated changes that touch behavior, flows, contracts, or APIs** — exactly where a line diff hides the impact.
+
+### Not ideal for yet
+
+- **Purely cosmetic changes** — formatting, comments, and leaf-only edits fold by design, so the card stays quiet.
+- **Single-file scripts** — there's little cross-boundary structure to draw.
+- **Repos with no meaningful cross-boundary flow** — on a single in-process codebase or a monorepo of independent tools, Mappamind tells you there's no mesh to draw instead of fabricating one. That's the design; the picture there is naturally sparse.
+
+See **[Coverage & support](docs/COVERAGE.md)** for the full language list, the repo and workspace shapes it handles, and the size limits.
 
 ## How it works
 
@@ -190,10 +227,13 @@ Four layers, from raw code facts to the picture you see:
 |---|---|
 | 4 · Conveyance | the **before/after picture**, in-session at the accept moment |
 | 3 · Trigger | the **agent-session boundary** (Claude Code / Codex lifecycle hooks) |
-| 2 · Leash | **grounded** comprehension — cite a real fact or drop; never lies |
+| 2 · Leash | **grounded** comprehension — cite a real fact or drop the claim |
 | 1 · Code graph | blast-radius traversal over tree-sitter facts (imports → calls → contracts) |
 
-The rule that keeps us off the per-language treadmill: **new coverage is always a prompt + a schema, never a framework catcher.**
+Two design rules keep the product honest and off the per-language treadmill:
+
+- **The leash:** every intelligent output cites a real code fact or it is dropped. Unsupported claims never reach the card.
+- **The anti-treadmill rule:** new language or medium coverage is always a prompt + a schema, never a new framework catcher.
 
 Two moments:
 
@@ -208,13 +248,13 @@ repo ─▶ capture ─▶ extractors ─▶      agent session ENDS ─▶ [Sto
 
 The Studio is one page with four tabs — **Studio** (the service mesh), **Shifts** (session history), **Capabilities**, **Contracts** — switched with CSS-only tabs. Workspace cards qualify paths as `repo/path`, so a microservice suite or a web-app-plus-backend renders without name collisions.
 
-## What it covers
+### Cost and latency
 
-Tree-sitter facts across **17 languages** out of the box (TypeScript, JavaScript, Go, Python, Java, C#, C, C++, PHP, Ruby, Rust, Kotlin, Swift, Scala, Dart, shell, and more). New language or framework coverage is a prompt and a schema, not new parsing code.
+The first baseline is the expensive step because Mappamind reads the workspace and asks the model to synthesize grounded capabilities. Per-session shift cards are smaller: they diff against the before snapshot, traverse only the affected graph slice, fold cosmetic changes, and avoid model calls when nothing downstream is hit.
 
-**Best for a service architecture.** Mappamind shines on repos where services call each other across a boundary — microservices, a frontend talking to a backend, a multi-repo workspace. It detects those cross-service channels from real code and stays quiet rather than invent a mesh when there isn't one. On a single in-process codebase or a monorepo of independent tools (where there's no service mesh to draw), it will tell you so instead of fabricating one — that's the design, but the picture there is naturally sparse.
+Today Mappamind re-reads the tree each session. For large repositories, `status`, `setup`, and `shift` print a large-repo advisory instead of hiding the cost. A token-usage chart belongs in benchmarks once the eval data is stable; until then, this README avoids implying a precise cost curve.
 
-See **[Coverage & support](docs/COVERAGE.md)** for the full language list, the repo and workspace shapes it handles, and the size limits.
+For the deeper design, read **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 ## Requirements
 
@@ -285,7 +325,9 @@ docs/
 
 ## Contributing & feedback
 
-This is open source, and the goal is for Mappamind to be the obvious answer to "what did my agent just do?" Issues, ideas, and pull requests are welcome. Tell us what landed and what didn't in [**Discussions**](https://github.com/mappamind/mappamind/discussions) — especially: did a card make a real change's impact obvious at the accept moment?
+This is open source, and the goal is for Mappamind to be the obvious answer to "what did my agent just do?" Issues, ideas, and pull requests are welcome — see **[CONTRIBUTING.md](CONTRIBUTING.md)** to get started.
+
+Tell us what landed and what didn't in [**Discussions**](https://github.com/mappamind/mappamind/discussions) — especially: did a card make a real change's impact obvious at the accept moment? Found a confusing card or a claim that wasn't grounded? Open a [false-positive report](https://github.com/mappamind/mappamind/issues/new/choose).
 
 The **[Roadmap](docs/ROADMAP.md)** lays out what's next and the rules to build it by; **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** explains how the system works (read it first).
 

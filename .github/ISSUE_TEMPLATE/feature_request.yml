@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest a new capability or an improvement.
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For open-ended ideas, [Discussions](https://github.com/mappamind/mappamind/discussions)
+        is often a better first stop. File here when you have a concrete proposal.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What can't you do today, or what's painful? Focus on the need, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you'd like Mappamind to do.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else
+      description: Repo shape, agent host, or use case that makes this matter.

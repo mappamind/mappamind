@@ -1,0 +1,62 @@
+name: Bug report
+description: Something broke or behaved incorrectly (crash, wrong output, command failure).
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. If a card stated something that wasn't true or fired on a
+        cosmetic change, please use **False positive / confusing card** instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do, and what went wrong?
+      placeholder: I ran `mappamind setup . --host claude --yes` and ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact commands you ran, in order.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output / error
+      description: Relevant CLI output or error text. Please redact anything private.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Mappamind version
+      description: Output of `mappamind --version` (or the npm version installed).
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Model host
+      options:
+        - claude
+        - codex
+        - none / not applicable
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: OS and Node version
+      placeholder: "macOS 14 / Node 20.11"
+    validations:
+      required: true
