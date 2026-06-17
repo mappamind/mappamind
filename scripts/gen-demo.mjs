@@ -154,8 +154,46 @@ const card = (href, tag, tagClass, title, desc) =>
   `<div class="extag ${tagClass}">${tag}</div><h3>${title}</h3><p>${desc}</p><span class="open">Open chart →</span></a>`;
 // Self-contained paper grain (no external asset), matching the product surfaces.
 const GRAIN = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+// ---- SEO (the Pages site is new; help Google index + represent it) ----------------
+const SITE = "https://mappamind.github.io/mappamind/";
+const OG_IMAGE = `${SITE}assets/shift-card.png`;
+const DESC =
+  "See what your AI coding agent just did to your system — a grounded, visual before/after of your architecture's behavior, flow, and contracts, in-session at the accept moment. Open-source CLI for Claude Code and Codex.";
+// Google Search Console HTML-tag verification token. Paste it once the Search Console
+// URL-prefix property is created; the tag is omitted while empty so the build still works.
+const GSC_VERIFY = "";
+const SEO_HEAD = [
+  `<meta name="description" content="${DESC}">`,
+  `<link rel="canonical" href="${SITE}">`,
+  `<meta property="og:type" content="website">`,
+  `<meta property="og:site_name" content="Mappamind">`,
+  `<meta property="og:title" content="Mappamind — see what your AI agent just did">`,
+  `<meta property="og:description" content="${DESC}">`,
+  `<meta property="og:url" content="${SITE}">`,
+  `<meta property="og:image" content="${OG_IMAGE}">`,
+  `<meta name="twitter:card" content="summary_large_image">`,
+  `<meta name="twitter:title" content="Mappamind — see what your AI agent just did">`,
+  `<meta name="twitter:description" content="${DESC}">`,
+  `<meta name="twitter:image" content="${OG_IMAGE}">`,
+  GSC_VERIFY ? `<meta name="google-site-verification" content="${GSC_VERIFY}">` : "",
+  `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Mappamind",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "macOS, Linux",
+    description: DESC,
+    url: SITE,
+    image: OG_IMAGE,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    sameAs: ["https://github.com/mappamind/mappamind", "https://www.npmjs.com/package/mappamind-cli"]
+  })}</script>`
+]
+  .filter(Boolean)
+  .join("\n");
 const index = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mappamind — live examples</title>
+${SEO_HEAD}
 <style>${FONT_FACE}
 :root{
   --bg:#07131b; --card:#0c1f2b; --line:rgba(124,178,186,0.16); --line-soft:rgba(124,178,186,0.09);
@@ -212,4 +250,26 @@ ${card("examples/studio.html", "Studio", "blue", "The standing architecture", "T
 writeFileSync("docs/index.html", index);
 writeFileSync("docs/.nojekyll", "");
 
-console.log("wrote docs/index.html, docs/.nojekyll, and docs/examples/{shift-broken,shift-multi,shift-healthy,studio}.html");
+// ---- sitemap (submitted directly in Search Console) -------------------------------
+// Absolute URLs are required: the Pages base is the /mappamind/ project subpath. lastmod
+// is a static date (no new Date() — keep the build deterministic; bump it on real edits).
+// No robots.txt: on a project Pages site it would serve at …/mappamind/robots.txt, which
+// crawlers ignore (they only read the host-root mappamind.github.io/robots.txt, which this
+// repo doesn't own). The host default already allows crawling and the sitemap is submitted
+// directly in Search Console, so a subpath robots.txt would be useless and misleading.
+const LASTMOD = "2026-06-18";
+const SITEMAP_PATHS = ["", "examples/shift-broken.html", "examples/shift-multi.html", "examples/shift-healthy.html", "examples/studio.html"];
+const sitemap =
+  `<?xml version="1.0" encoding="UTF-8"?>\n` +
+  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  SITEMAP_PATHS.map((p) => `  <url><loc>${SITE}${p}</loc><lastmod>${LASTMOD}</lastmod></url>`).join("\n") +
+  `\n</urlset>\n`;
+writeFileSync("docs/sitemap.xml", sitemap);
+
+// ---- Google Search Console verification (HTML-file method) -------------------------
+// Google serves this from the /mappamind/ property root; the body must be exactly the
+// "google-site-verification: <file>" line Google generated.
+const GSC_FILE = "google80c4cbfe7a0a06d7.html";
+writeFileSync(`docs/${GSC_FILE}`, `google-site-verification: ${GSC_FILE}\n`);
+
+console.log(`wrote docs/index.html, docs/sitemap.xml, docs/${GSC_FILE}, docs/.nojekyll, and docs/examples/{shift-broken,shift-multi,shift-healthy,studio}.html`);
